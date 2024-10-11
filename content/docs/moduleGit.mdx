@@ -3,11 +3,13 @@ title: Git & GitHub
 description: Basic Git Commands
 ---
 
-# গিট কি ?
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-gray-100 inline-block text-transparent bg-clip-text text-5xl">Git কি ?</h1>
 
 গিট হলো একটি `ভার্সন কনট্রোল` টুল।
 
-----
+---
 
 # ভার্সন কনট্রোল কি ?
 
@@ -218,19 +220,29 @@ git stash pop
 
 19. কোন ফাইল ভুলবশত গিটে এড করে ফেললে বা কমিট করার পর যদি মনে হয় ফাইলটা গিট থেকে ইগনোর করতে হবে তাহলে:
 
+<Steps>
+<Step>
+
 ### ১ম স্টেপঃ
 
 একটা .gitignore ফাইল বানাতে হবে এবং তাতে উক্ত ফাইলের নাম এড করা লাগবে ।
 
+</Step>
+<Step>
 ### ২য় স্টেপঃ
 
 ```bash
 git rm --cached <filename>
 ```
 
+</Step>
+</Steps>
 ---
 
 20. গিটহাব বা রিমোট রিপোজিটরিতে ফাইল এড করা বা পুশ করার জন্যঃ
+
+<Steps>
+<Step>
 
 ### ১ম স্টেপঃ
 
@@ -242,6 +254,8 @@ example:
 
 `git remote add origin git@github.com:Deveripon/reactive-accelarator.git`
 
+</Step>
+<Step>
 ### ২য় স্টেপঃ
 
 ```bash
@@ -252,6 +266,8 @@ example:
 
 `git push -u origin main`
 
+</Step>
+</Steps>
 ---
 
 21. রিমোট রিপোজিটরি থেকে পুল করা
