@@ -1,0 +1,81 @@
+---
+title: 1.7-Javascript in jsx
+description: Wellcome to React Next Documantation Bangla
+---
+
+##  <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text pt-2">JSX-এ ডাইনামিক ভ্যালু এবং অবজেক্ট ব্যবহারের পদ্ধতি</h1>
+
+**`JSX`এ আমরা জাভাস্ক্রিপ্ট এবং `HTML` মার্কাপ একসাথে লিখতে পারি। যখনই মার্কাপে কোন ডাইনামিক ভ্যালু ব্যবহার করতে হয়, অথবা কোন লজিক্যাল অপারেশন চালাতে হয়, এমনকি যদি কোন ভ্যারিয়েবলের বা অবজেক্টের ভ্যালু এক্সেস করার প্রয়োজন হয়, তখন তা `{ }` ডাবল কার্লি ব্রেসেসের ভিতরে লিখতে হয়।**
+
+## উদাহরণ
+
+```javascript filename="Profile.jsx" showLineNumbers {5-6,8}
+export default function Profile(name) {
+  let age = 30;
+  return (
+    <div className="profile-card">
+      <h1>Hello Mr {name}</h1>{" "}
+      {/* name হলো একটা ডাইনামিক ভ্যালু যা {} দিয়ে লেখা হয়েছে */}
+      জাভাস্ক্রিপ্টের মাধ্যমে লেখা হয়েছে।
+      <p>Your age is {age}</p>{" "}
+      {/* age একটা ভ্যারিয়েবল থেকে পাওয়া ডাইনামিক ভ্যালু যা {} দিয়ে লেখা হয়েছে */}
+      <p>
+        You are {age >= 21 ? "Eligible" : "Not Eligible"} for Marriage
+        {/* এই লাইনে জাভাস্ক্রিপ্টের মাধ্যমে লজিক্যাল অপারেশন করা হয়েছে */}
+      </p>
+    </div>
+  );
+}
+```
+
+অর্থাৎ `{ }` দিয়ে এর ভিতরে আমরা জাভাস্ক্রিপ্টের এক্সপ্রেশন লিখতে পারি।
+
+## “ডাবল কার্লিস” ব্যবহারের সময় CSS এবং অন্যান্য অবজেক্ট
+
+```javascript filename="Profile.jsx" showLineNumbers {6,8-11}
+export default function Profile(name) {
+  let age = 30;
+  return (
+    <div
+      className="profile-card"
+      style={{
+        // এই লাইনে অবজেক্ট লেখা হয়েছে
+        backgroundColor: "gray",
+        color: "black",
+        fontWeight: "bold",
+      }}
+    >
+      <h1>Hello Mr {name}</h1>{" "}
+      {/* name হলো একটা ডাইনামিক ভ্যালু যা {} দিয়ে লেখা হয়েছে */}
+      জাভাস্ক্রিপ্টের মাধ্যমে লেখা হয়েছে।
+      <p>Your age is {age}</p>{" "}
+      {/* age একটা ভ্যারিয়েবল থেকে পাওয়া ডাইনামিক ভ্যালু যা {} দিয়ে লেখা হয়েছে */}
+      <p>
+        You are {age >= 21 ? "Eligible" : "Not Eligible"} for Marriage
+        {/* এই লাইনে জাভাস্ক্রিপ্টের মাধ্যমে লজিক্যাল অপারেশন করা হয়েছে */}
+      </p>
+    </div>
+  );
+}
+```
+
+যখন `JSX` এ `{ }` এর ভিতরে কোন অবজেক্ট লিখতে হয়, তখনও একই স্টেপ ফলো করতে হবে। মনে হতে পারে যে আমরা দুইবার `{ }` ব্যবহার করছি, কিন্তু প্রথম `{ }` টা হলো জাভাস্ক্রিপ্টের জন্য জায়গা বানানো এবং দ্বিতীয় `{ }` টা হলো অবজেক্টের জন্য।
+
+### গুরুত্বপূর্ণ পয়েন্ট
+
+1. **এনক্যাপসুলেশন**: `{ }` এর মধ্যে লেখার মাধ্যমে আপনি কোডের ফ্লো বজায় রাখতে পারেন, যেখানে ডাইনামিক ভ্যালু এবং লজিক একসাথে কাজ করে।
+
+2. **সাবধানতা**: অবজেক্টের মধ্যে প্রপার্টি নেমস যেমন `backgroundColor` লেখা হয় ক্যামেল কেসে, যেহেতু JSX কেস সেনসিটিভ।
+
+3. **ক্লিন কোডিং**: জটিল এক্সপ্রেশনগুলি এক লাইনে লেখা থেকে বিরত থাকুন, পরিবর্তে তা ভেরিয়েবল হিসেবে আলাদা করে লেখার চেষ্টা করুন, যা কোডটিকে পরিষ্কার এবং বুঝতে সহজ করে।
+
+### উপসংহার
+
+JSX এর `{ }` ব্যবহার করার মাধ্যমে আপনি আপনার অ্যাপ্লিকেশনে ডাইনামিক কন্টেন্ট এবং স্টাইলিং যুক্ত করতে পারেন, যা React কে একটি শক্তিশালী ফ্রেমওয়ার্ক হিসেবে প্রতিষ্ঠিত করে।
+
+```
+
+---
+
+This enhanced version maintains your original content while adding additional insights and formatting in MDX. If you have any further questions or need additional sections, feel free to ask!
+```
