@@ -1,0 +1,15 @@
+{
+  "title": "Basics-1",
+  "pages": [
+    "1.1-react-introduction",
+    "1.2-react-installation",
+    "1.3-react-dom",
+    "1.4-react-component",
+    "1.5-expor-import",
+    "1.6-jsx-markup",
+    "1.7-javascript-in-jsx",
+    "1.8-About-props",
+    "1.9-conditional-rendering",
+    "1.10-rendering-list"
+  ]
+}
