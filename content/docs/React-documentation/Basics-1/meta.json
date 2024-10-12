@@ -10,6 +10,7 @@
     "1.7-javascript-in-jsx",
     "1.8-About-props",
     "1.9-conditional-rendering",
-    "1.10-rendering-list"
+    "1.10-rendering-list",
+    "1.11-pure-components"
   ]
 }
