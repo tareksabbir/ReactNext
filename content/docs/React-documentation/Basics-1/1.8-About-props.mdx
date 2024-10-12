@@ -1,0 +1,240 @@
+---
+title: 1.8-What is Props
+description: Wellcome to React Next Documantation Bangla
+---
+
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Props কি?</h1>
+
+React-এ `Props` (Properties) হলো একটি গুরুত্বপূর্ণ কনসেপ্ট, যা Parent Component থেকে Child Component-এ ডেটা পাঠানোর জন্য ব্যবহৃত হয়। এটি ফাংশনের প্যারামিটারগুলোর মতো কাজ করে।
+
+আমরা যেভাবে HTML-এ Attributes লিখি, সেভাবেই `Props` পাঠাতে পারি।
+
+## Props এর মূল উদ্দেশ্য
+
+---
+
+`Props` ব্যবহার করে আমরা:
+
+- Component-এর মধ্যে ডেটা শেয়ার করতে পারি।
+- Component-কে কাস্টমাইজ করতে পারি।
+- Functional Components-এ ডাইনামিক কন্টেন্ট যুক্ত করতে পারি।
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Props পাঠানোর উদাহরণ</h1>
+
+---
+
+```javascript filename="Profile.jsx" {4,5}
+export default function Profile() {
+  return (
+    <Avatar // `imgurl` এবং `size` নামে দুটি props পাঠানো হয়েছে Child Component Avatar-এ।
+      imgurl="https://example.com/image/1.png"
+      size={100}
+    />
+  );
+}
+```
+
+### ব্যাখ্যা
+
+- উপরের উদাহরণে, `Profile` Component থেকে `Avatar` Component-এ দুটি prop পাঠানো হচ্ছে: `imgurl` এবং `size`।
+
+```javascript filename="Avatar.jsx" {5-7}
+export default function Avatar(props) {
+  // Parent Avatar কম্পোনেন্ট থেকে props নামে একটি Object হিসেবে props গুলো রিসিভ করা হয়েছে
+  return <img src={props.imgurl} alt="Avatar Image" size={props.size} />;
+}
+```
+
+### ব্যাখ্যা
+
+- এখানে `Avatar` Component `props` নামে একটি অবজেক্ট রিসিভ করছে, যা Parent Component থেকে প্রাপ্ত props ধারণ করে।
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Props পাঠানোর এবং রিসিভ করার পদ্ধতি</h1>
+
+---
+
+<Steps>
+<Step>
+### Step 1: Child Component-এ Props পাঠানো
+
+```javascript filename="Profile.jsx"
+export default function Profile() {
+  return (
+    <Avatar
+      person={{ name: "Lin Lanying", imageId: "1bX5QH6" }} // একটি অবজেক্ট হিসেবে `person`
+      size={100} // একটি সংখ্যা হিসেবে `size`
+    />
+  );
+}
+```
+
+</Step>
+<Step>
+### Step 2: Child Component-এ Props রিসিভ করা
+
+```javascript filename="Avatar.jsx" {1,5-7}
+export default function Avatar(props) {
+  return (
+    <div>
+      <img
+        src={props.person.imageId} // `person` অবজেক্টের `imageId` অ্যাক্সেস করা
+        alt={props.person.name} // `name` অ্যাক্সেস করা
+        size={props.size}
+      />
+    </div>
+  );
+}
+```
+
+</Step>
+</Steps>
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Props ডিকন্সট্রাকচারিং পদ্ধতিতে রিসিভ করা</h1>
+
+---
+
+ডিকন্সট্রাকচারিং পদ্ধতি ব্যবহার করে আমরা সরাসরি props-কে ডিক্লেয়ার করতে পারি।
+
+```javascript filename="Avatar.jsx" {1}
+export default function Avatar({ imgurl, size }) {
+  return <img src={imgurl} alt="Avatar Image" size={size} />;
+}
+```
+
+### ব্যাখ্যা
+
+- এখানে `{ imgurl, size }` ডিকন্সট্রাকচারিং ব্যবহার করে সরাসরি props রিসিভ করা হয়েছে, যা কোডকে পরিষ্কার ও সহজ করে তোলে।
+
+## Props এ ডিফল্ট ভ্যালু ব্যবহার করা
+
+---
+
+কখনও কখনও `Props` এর ভ্যালু `undefined` আসতে পারে, তখন আমাদের ডিফল্ট ভ্যালু সেট করা প্রয়োজন হতে পারে।
+
+```javascript filename="Avatar.jsx" {1}
+export default function Avatar({ imgurl, size = 100 }) {
+  return <img src={imgurl} alt="Avatar Image" size={size} />;
+}
+```
+
+### ব্যাখ্যা
+
+- এখানে `size` এর ডিফল্ট ভ্যালু 100 সেট করা হয়েছে। যদি `size` প্রদান করা না হয়, তাহলে এটি 100 ব্যবহার করবে।
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">JSX স্প্রেড সিনট্যাক্সের মাধ্যমে Props ফরওয়ার্ড করা</h1>
+
+---
+
+কখনও কখনও একটি Component-এ যে Props গুলো রিসিভ করা হয়েছে, সেগুলোকে অন্য Component-এ ফরওয়ার্ড করতে হতে পারে। এ জন্য আমরা `JSX` স্প্রেড সিনট্যাক্স `{...props}` ব্যবহার করতে পারি।
+
+<Steps>
+<Step>
+### Step 1: Props পাঠানো
+
+```javascript filename="App.jsx" showLineNumbers
+export default function App() {
+  return (
+    <div>
+      <Profile name="Ripon" age={30} gender="male" />
+    </div>
+  );
+}
+```
+
+</Step>
+<Step>
+### Step 2: Props রিসিভ করা
+
+```javascript filename="Profile.jsx" showLineNumbers {1}
+export default function Profile(props) {
+  return (
+    <div>
+      <Card {...props} /> {/* এখানে সমস্ত props ফরওয়ার্ড করা হয়েছে */}
+    </div>
+  );
+}
+```
+
+</Step>
+<Step>
+### Step 3: Props ফরওয়ার্ড করা
+
+```javascript filename="Card.jsx" showLineNumbers {4}
+export default function Card(props) {
+  return (
+    <div>
+      <h1>This is a Profile Card</h1>
+      <p>Name: {props.name}</p>
+      <p>Age: {props.age}</p>
+      <p>Gender: {props.gender}</p>
+    </div>
+  );
+}
+```
+
+### ব্যাখ্যা
+
+- এখানে `Profile` Component থেকে `Card` Component-এ সমস্ত props `{...props}` করে ফরওয়ার্ড করা হয়েছে, যা কোডকে আরও সংক্ষিপ্ত ও পরিষ্কার করে।
+
+</Step>
+</Steps>
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Children Props হিসেবে JSX বা Component পাঠানো</h1>
+
+---
+
+আমরা একটি Component-কে অন্য Component হিসেবে props হিসেবে পাঠাতে পারি। এটিকে `children` props বলা হয়।
+
+```javascript filename="Card.jsx" showLineNumbers {3-5}
+export default function Profile() {
+  return (
+    <Card>
+      <Profile />
+    </Card>
+  );
+}
+```
+
+### Card Component
+
+---
+
+```javascript filename="Card.jsx" showLineNumbers {1,5}
+export default function Card({ children }) {
+  return (
+    <div className="card">
+      <h1>This is a Profile Card</h1>
+      {children} {/* এখানে `children` Props হিসেবে রিসিভ করা হয়েছে */}
+    </div>
+  );
+}
+```
+
+### ব্যাখ্যা
+
+- এখানে `Card` Component-এ `children` Props রিসিভ করা হয়েছে, যা Parent Component থেকে পাঠানো `Profile` Component কে ধারণ করে।
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Props are Immutable: কেন?</h1>
+
+---
+
+`Props` গুলো সরাসরি পরিবর্তন করা যায় না, কারণ `props` হলো `immutable`। `Props` কে শুধুমাত্র Parent Component থেকে State দ্বারা ম্যানেজ করতে হয়।
+
+### উদাহরণ
+
+- যদি কোন ইউজারের ইন্টারেকশনের মাধ্যমে `props` এর ভ্যালু পরিবর্তন করা প্রয়োজন হয়, তাহলে React নতুন `Props` পাঠায় `Child Component`-এ। কিন্তু আগের পাঠানো `props` পরিবর্তন করে না।
+
+- নতুন `Props` পাঠানোর পর আগের `Props` মেমরি থেকে মুছে ফেলা হয় বা গার্বেজ কালেক্ট করা হয়।
+
+### গুরুত্বপূর্ণ পয়েন্ট
+
+- **Props Immutable**: কখনও `Child Component` এর ভিতর `Props` এর ভ্যালু পরিবর্তন বা ওভাররাইড করা যাবে না।
+- **State Management**: `State` ব্যবহার করে ডেটা পরিবর্তন করতে হবে এবং তার মাধ্যমে নতুন `Props` পাঠাতে হবে।
+
+## উপসংহার
+
+---
+
+`Props` হলো React-এ একটি শক্তিশালী কনসেপ্ট, যা Component-কে আরও ডাইনামিক এবং কাস্টমাইজ করতে সহায়তা করে। `Props` পাঠানো এবং রিসিভ করার সঠিক পদ্ধতি অনুসরণ করলে আপনার কোড হবে পরিষ্কার ও কার্যকরী। মনে রাখবেন, `Props` immutable, তাই ডেটার পরিবর্তনের জন্য `State` ব্যবহারের মাধ্যমে নতুন `Props` পাঠাতে হবে।
