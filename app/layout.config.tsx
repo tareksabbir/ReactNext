@@ -1,4 +1,5 @@
 import { type HomeLayoutProps } from "fumadocs-ui/home-layout";
+import Logo from '@/public/logo.svg';
 
 /**
  * Shared layout configurations
