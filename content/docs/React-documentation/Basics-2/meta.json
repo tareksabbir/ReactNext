@@ -1,5 +1,8 @@
 {
-    "title": "Basics-2",
-    "pages": ["2.1-responding-to-event","2.2-event-propagation","2.3-understanding-state"]
-  }
-  
+  "title": "Basics-2",
+  "pages": [
+    "2.1-responding-to-event",
+    "2.2-event-propagation",
+    "2.3-understanding-state"
+  ]
+}
