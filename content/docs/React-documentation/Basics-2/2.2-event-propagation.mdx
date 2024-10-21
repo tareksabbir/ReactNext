@@ -5,7 +5,6 @@ description: Wellcome to React Next Documantation Bangla
 
 ## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">ইভেন্ট ডেলিগেশন (event deligation) কি ?</h1>
 
-
 ইভেন্ট ডেলিগেশন হলো একাধিক এলিমেন্টের জন্য একটাই ইভেন্ট লিসেনার রাখা এবং নতুন কোন এলিমেন্ট যুক্ত হলেও যেন লিসেনার কাজ করে ।
 
 ইভেন্ট ডেলিগেশন হলো এমন একটা টেকনিক যা মূলত দুইটা জিনিসে ফোকাস করেঃ-
@@ -21,13 +20,13 @@ description: Wellcome to React Next Documantation Bangla
 চলুন জেনে নেই সেটা কিভাবে করেঃ
 
 ```jsx filename="index.html" showLineNumbers
-<div class='list-of-item'>
-    <ul id='list'>
-        <li class='item'>Apple</li>
-        <li class='item'>Orange</li>
-        <li class='item'>Strawberry</li>
-        <li class='item'>Banana</li>
-    </ul>
+<div class="list-of-item">
+  <ul id="list">
+    <li class="item">Apple</li>
+    <li class="item">Orange</li>
+    <li class="item">Strawberry</li>
+    <li class="item">Banana</li>
+  </ul>
 </div>
 ```
 
@@ -36,7 +35,7 @@ description: Wellcome to React Next Documantation Bangla
 ```javascript filename="index.js" showLineNumbers
 const list = document.getElimentById("list");
 list.addEventListener("click", (e) => {
-    e.target.style.backgroundColor = "yellow";
+  e.target.style.backgroundColor = "yellow";
 });
 ```
 
@@ -66,7 +65,7 @@ list.addEventListener("click", (e) => {
 
 ---
 
-### ইভেন্ট প্রপাগেশন (event propagation) কি ?
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">ইভেন্ট প্রপাগেশন (event propagation) কি ?</h1>
 
 প্রপাগেশন শব্দের বাংলা অর্থ হলো বিস্তার করা বা প্রসারণ করা বা চলাচল করা।
 
@@ -79,10 +78,10 @@ list.addEventListener("click", (e) => {
 উপরের ছবিতে আমরা তিনটা নেস্টেড এলিমেন্ট দেখতে পাচ্ছি যার প্রতিটাতেই ইভেন্ট লিসেনার এড করা আছে। এবং লিসেনার গুলো এলিমেন্টগুলোতে ক্লিক করলে ট্রিগার হবে।
 
 ```jsx filename="index.html" showLineNumbers
-<div class='main'>
-    <div class='parent'>
-        <button>Click Me</button>
-    </div>
+<div class="main">
+  <div class="parent">
+    <button>Click Me</button>
+  </div>
 </div>
 ```
 
@@ -96,13 +95,15 @@ parent.addEventListener("click", listener);
 button.addEventListener("click", listener);
 
 function listener() {
-    console.log(e.target);
+  console.log(e.target);
 }
 ```
 
 এখন যদি আমরা `button` এলিমেন্টে ক্লিক করবো তাহলে আমরা দেখতে পাবো প্রতিটা লিসেনার এ কল হয়ে গেছে এবং কনসল এ তিনটার আউটপুট এসেছে । এইযে একটা ব্যাপার যে ক্লিক করলাম একটাতে আর লিসেনার কল হয়ে গেল তিনটাই, এই ব্যাপারটাকেই বলা হয় `event Propagation`। মানে ইভেন্টগুলো বাকিদের মাঝেও ছড়িয়ে গেছে।
 
-### ইভেন্ট বাবলিং (Bubbling) কি ?
+---
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2"> ইভেন্ট বাবলিং (Bubbling) কি ?</h1>
 
 ```jsx filename="index.js" showLineNumbers
 const main = document.querySelector(".main");
@@ -114,7 +115,7 @@ parent.addEventListener("click", listener);
 button.addEventListener("click", listener);
 
 function listener() {
-    console.log(e.currentTarget);
+  console.log(e.currentTarget);
 }
 ```
 
@@ -140,7 +141,7 @@ parent.addEventListener("click", listener, { capture: true });
 button.addEventListener("click", listener, { capture: true });
 
 function listener() {
-    console.log(e.currentTarget);
+  console.log(e.currentTarget);
 }
 ```
 
@@ -150,7 +151,9 @@ function listener() {
 
 এইযে আমরা প্রপাগেশনকে `capture` করে এর ডিরেকশন চেঞ্জ করলাম এটাকে বলা হয় **ইভেন্ট কেপচারিং বা ট্রিকলিং (capturing or trickling)**।
 
-### Propagation in React
+---
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2"> Propagation in React</h1>
 
 রিয়াক্টে সকল ইভেন্ট ই প্রপাগেট হয়,শুধুমাত্র `onScroll` ইভেন্ট ছাড়া ।
 
@@ -160,29 +163,31 @@ function listener() {
 
 ```jsx filename="App.jsx" showLineNumbers
 function Button({ onClick, children }) {
-    return (
-        <button
-            onClick={(e) => {
-                e.stopPropagation(); // এখানে প্রপাগেশন স্টপ করা হয়েছে
-                onClick();
-            }}>
-            {children}
-        </button>
-    );
+  return (
+    <button
+      onClick={(e) => {
+        e.stopPropagation(); // এখানে প্রপাগেশন স্টপ করা হয়েছে
+        onClick();
+      }}
+    >
+      {children}
+    </button>
+  );
 }
 
 export default function Toolbar() {
-    // এই কম্পোনেন্টে তিনটা এলিমেট আছে নেস্টেড ভাবে এবং প্রতিটা এলিমেন্টেই ইভেন্ট হ্যান্ডেলার এড করা আছে। তার মানে ডিফল্ট ভাবে এখানে প্রপাগেশন হবে ।
-    return (
-        <div
-            className='Toolbar'
-            onClick={() => {
-                alert("You clicked on the toolbar!");
-            }}>
-            <Button onClick={() => alert("Playing!")}>Play Movie</Button>
-            <Button onClick={() => alert("Uploading!")}>Upload Image</Button>
-        </div>
-    );
+  // এই কম্পোনেন্টে তিনটা এলিমেট আছে নেস্টেড ভাবে এবং প্রতিটা এলিমেন্টেই ইভেন্ট হ্যান্ডেলার এড করা আছে। তার মানে ডিফল্ট ভাবে এখানে প্রপাগেশন হবে ।
+  return (
+    <div
+      className="Toolbar"
+      onClick={() => {
+        alert("You clicked on the toolbar!");
+      }}
+    >
+      <Button onClick={() => alert("Playing!")}>Play Movie</Button>
+      <Button onClick={() => alert("Uploading!")}>Upload Image</Button>
+    </div>
+  );
 }
 ```
 
@@ -194,16 +199,16 @@ export default function Toolbar() {
 
 ```jsx filename="App.js" showLineNumbers
 export default function Signup() {
-    return (
-        <form
-            onSubmit={(e) => {
-                e.preventDefault();
-                alert("Submitting!");
-            }}>
-            <input />
-            <button>Send</button>
-        </form>
-    );
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        alert("Submitting!");
+      }}
+    >
+      <input />
+      <button>Send</button>
+    </form>
+  );
 }
 ```
-
