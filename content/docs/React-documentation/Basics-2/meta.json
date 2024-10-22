@@ -3,6 +3,11 @@
   "pages": [
     "2.1-responding-to-event",
     "2.2-event-propagation",
-    "2.3-understanding-state"
+    "2.3-understanding-state",
+    "2.4-how-render-works",
+    "2.5-state-as-snapshot",
+    "2.6-queueing",
+    "2.7-objects-in-a-state",
+    "2.8-arrays-in-a-state"
   ]
 }
