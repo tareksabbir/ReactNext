@@ -1,0 +1,15 @@
+{
+    "title": "Intermediate-1",
+    "pages": [
+      "3.1-declarative-Imperative",
+      "3.2-thinking-about-ui",
+      "3.3-choosing-the-state-structure",
+      "3.4-lifting-state-up",
+      "3.5-preserving-and-resetting-state",
+      "3.6-resetting-state-at-same-position",
+      "3.7-extracting-state-logic-into-reducer",
+      "3.8-passing-data-deeply-with-context",
+      "3.9-scaling-up-with-reducer-and-context"
+    ]
+  }
+  
