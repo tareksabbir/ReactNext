@@ -2,3 +2,145 @@
 title: 3.4 Lifting State Up
 description: Wellcome to React Next Documantation Bangla
 ---
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Lifting State Up বা স্টেটকে উপরে নেওয়া</h1>
+
+#### কি বুঝায় লিফটিং স্টেট আপ?
+
+`lifting state up` মানে হলো, যখন তুমি কোন কম্পোনেন্টের ভিতরের স্টেটকে তার প্যারেন্ট কম্পোনেন্টে নিয়ে যাও। এখন কেন এটা করতে হবে? কারণ, ধরো, তুমি যদি স্টেটটাকে নিচের লেভেলে রেখে দাও, তাহলে সেই কম্পোনেন্টটা হয়তো নিজস্বভাবে স্টেট ম্যানেজ করবে, কিন্তু অন্যান্য কম্পোনেন্ট সেটার সাথে সংযোগ করতে পারবে না।
+
+যেমন, তোমার যদি একটা প্যারেন্ট কম্পোনেন্ট থাকে যেখানে দুইটা `sibling` কম্পোনেন্ট থাকে, এবং এক `sibling` কম্পোনেন্টে কিছু ডাটা জেনারেট হয় যা আরেকটা `sibling` কম্পোনেন্টে দরকার হয়, তখন সেই স্টেটটা লোকাল রাখলে হবে না। এ অবস্থায় আমরা সেই স্টেটকে প্যারেন্ট কম্পোনেন্টে নিয়ে যাই। তাহলে প্যারেন্ট সেই স্টেটটাকে সব চাইল্ডের মধ্যে ভাগ করে দিতে পারবে।
+
+#### উদাহরণঃ
+
+তুমি ভাবো, তুমি একটা `App` কম্পোনেন্ট বানাচ্ছো। সেই `App`-এর ভিতরে দুইটা `sibling` কম্পোনেন্ট আছে—`Product` এবং `Cart`। এখন `Product`-এ যদি কিছু প্রোডাক্ট সিলেক্ট করা হয়, সেই ইনফরমেশন তোমার `Cart` কম্পোনেন্টেও লাগবে। তখন কি করতে হবে?
+
+প্রথমে একটা সাধারণ `App` কম্পোনেন্ট দেখো যেখানে `Product` এবং `Cart` আছে:
+
+```jsx
+const App = () => {
+  return (
+    <div>
+      <Product />
+      <Cart />
+    </div>
+  );
+};
+
+export default App;
+```
+
+এখন ধরো `Product` কম্পোনেন্টে তুমি কিছু স্টেট রাখো যেটা `Cart`-এ দরকার। তুমি সেটা সরাসরি `Cart`-এ পাঠাতে পারছো না কারণ তারা `Sibling`। তাই, আমরা সেই স্টেটটাকে `App`-এ নিয়ে যাবো।
+
+যদি স্টেটকে `App`-এ নিয়ে যাই, তখন আমরা `props` এর মাধ্যমে সেই ডাটা `Product` আর `Cart`-এ পাঠাতে পারবো। এই পদ্ধতিটাই হলো **lifting state up**।
+
+#### কিভাবে স্টেটকে উপরে নেয়া হয়?
+
+এখন ধরো, `Product`-এ একটা প্রোডাক্টের নাম আর প্রাইস রাখা হয়েছে। আর সেই ডাটা `Cart`-এ শো করা হবে। আমরা শুরুতে `Product`-এ স্টেট নিবো, কিন্তু পরে আমরা সেটাকে `App`-এ নিয়ে যাবো:
+
+```jsx
+const Product = ({ addToCart }) => {
+  const [productName, setProductName] = useState("Laptop");
+  const [productPrice, setProductPrice] = useState(1000);
+
+  const handleAddToCart = () => {
+    addToCart(productName, productPrice);
+  };
+
+  return (
+    <div>
+      <h2>{productName}</h2>
+      <p>Price: ${productPrice}</p>
+      <button onClick={handleAddToCart}>Add to Cart</button>
+    </div>
+  );
+};
+```
+
+এবার, আমরা `App`-এ এই স্টেটগুলো নিয়ে কাজ করবো, এবং `Cart`-এও সেই ডাটা পাস করবো:
+
+```jsx
+const App = () => {
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (name, price) => {
+    setCart([...cart, { name, price }]);
+  };
+
+  return (
+    <div>
+      <Product addToCart={addToCart} />
+      <Cart cartItems={cart} />
+    </div>
+  );
+};
+
+export default App;
+```
+
+`App`-এ এখন স্টেট আছে যা `Product` থেকে ডাটা নেয় এবং `Cart`-এ পাঠায়। এইভাবে আমরা স্টেটকে প্যারেন্টে তুলে এনেছি এবং সেটা সব চাইল্ড কম্পোনেন্টে ভাগ করে দিয়েছি।
+
+---
+
+### Controlled এবং Uncontrolled Components
+
+এখন আমরা `Controlled` এবং `Uncontrolled` কম্পোনেন্ট সম্পর্কে জানবো। এগুলো বুঝতে হলে তোমাকে প্রথমে জানতে হবে যে, রিয়াক্টে স্টেট আর প্রপ্স কিভাবে কাজ করে।
+
+#### Controlled Components
+
+`Controlled Components` মানে হলো, সেইসব কম্পোনেন্ট যেগুলোর স্টেট প্যারেন্টের কন্ট্রোলে থাকে। প্যারেন্ট কম্পোনেন্টে স্টেট থাকে এবং সেই স্টেটকে প্রপ্স দিয়ে চাইল্ড কম্পোনেন্টে পাঠানো হয়। চাইল্ড কম্পোনেন্ট নিজের স্টেট নিয়ন্ত্রণ করতে পারে না, সে শুধু প্যারেন্ট থেকে প্রপ্স নেয় আর সেটার উপর ভিত্তি করে কাজ করে।
+
+এটা তুমি ভালোভাবে বুঝতে পারবে নিচের উদাহরণ দিয়ে:
+
+```jsx
+const ParentComponent = () => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  return (
+    <div>
+      <ChildComponent value={inputValue} onChange={handleChange} />
+    </div>
+  );
+};
+
+const ChildComponent = ({ value, onChange }) => {
+  return <input type="text" value={value} onChange={onChange} />;
+};
+```
+
+এখানে `ChildComponent` পুরোপুরি `ParentComponent` এর উপর নির্ভরশীল। প্যারেন্ট কম্পোনেন্টের স্টেট `inputValue` কে প্রপ্স দিয়ে পাঠানো হয়েছে, এবং `onChange` ইভেন্টও পাঠানো হয়েছে।
+
+#### Uncontrolled Components
+
+`Uncontrolled Components` হলো সেই কম্পোনেন্ট যেগুলো নিজেদের স্টেট ম্যানেজ করে। এর মানে হলো, প্যারেন্ট কম্পোনেন্টের কোনো কন্ট্রোল থাকে না। সাধারণত `ref` এর মাধ্যমে ডম এলিমেন্টে সরাসরি অ্যাক্সেস করা হয়।
+
+নিচে একটা `Uncontrolled Component` এর উদাহরণ দেওয়া হলো:
+
+```jsx
+const UncontrolledComponent = () => {
+  const inputRef = useRef(null);
+
+  const handleSubmit = () => {
+    alert(inputRef.current.value);
+  };
+
+  return (
+    <div>
+      <input type="text" ref={inputRef} />
+      <button onClick={handleSubmit}>Submit</button>
+    </div>
+  );
+};
+```
+
+এখানে `input` ফিল্ডটা পুরোপুরি নিজস্বভাবে কাজ করছে। তুমি `ref` দিয়ে সেই `input`-এর ভ্যালু অ্যাক্সেস করতে পারো, কিন্তু সেটা প্যারেন্ট কম্পোনেন্টের কোন স্টেটের উপর নির্ভর করছে না।
+
+---
+
+### শেষ কথা
+
+তুমি যদি স্টেটগুলোকে ভালোভাবে ম্যানেজ করতে চাও, তাহলে কখন স্টেট উপরে নিয়ে আসবে (লিফট করবে) আর কখন সেটা নিজের মধ্যে রাখবে, সেটা বুঝতে হবে। `Controlled` কম্পোনেন্ট তখনই ভালো যখন প্যারেন্ট সব কিছুর কন্ট্রোল রাখতে চায়। আর `Uncontrolled` কম্পোনেন্ট তখনই ভালো যখন কম্পোনেন্ট নিজেই সব কিছু নিয়ন্ত্রণ করতে চায়।
