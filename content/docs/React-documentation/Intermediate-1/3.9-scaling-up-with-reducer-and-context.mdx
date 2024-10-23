@@ -2,3 +2,298 @@
 title: 3.9 Scaling Up
 description: Wellcome to React Next Documantation Bangla
 ---
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Scaling Up with Reducer and Context</h1>
+
+`reducer` আমাদের কম্পোনেন্টের স্টেট লজিকগুলোকে একত্রিত করে একটি ফাংশনের মধ্যে ম্যানেজ করতে সাহায্য করে। একই সঙ্গে, `Context` আমাদের ডাটা `props drilling` ছাড়াই কম্পোনেন্টের মধ্যে সহজে শেয়ার করতে দেয়। যখন আমরা `reducer` এবং `Context` একত্রিত করি, তখন আমাদের অ্যাপ্লিকেশনটি আরও সংগঠিত এবং সহজে রক্ষণাবেক্ষণযোগ্য হয়ে ওঠে।
+
+### Combining a Reducer with Context
+
+#### 1. Create the Context
+
+একটি কনটেক্সট তৈরি করতে, আমরা একটি নতুন ফাইল তৈরি করি এবং সেখানে `createContext` ফাংশন ব্যবহার করি। নিচের কোডটিতে আমরা `CounterContext` নামক একটি কনটেক্সট তৈরি করছি:
+
+```jsx filename="CounterContext.js"
+import { createContext } from "react";
+
+const CounterContext = createContext(0); // 0 হলো ডিফল্ট ভ্যালু
+export default CounterContext;
+```
+
+এখন, যেকোনো কম্পোনেন্টে আমরা এই কনটেক্সটটিকে ইম্পোর্ট করতে পারব এবং ব্যবহার করতে পারব।
+
+#### 2. Create a Reducer and Provide the State and Dispatch via Provider
+
+এখন আমরা একটি রিডিউসার তৈরি করবো। রিডিউসার হলো একটি ফাংশন, যা আমাদের স্টেটকে পরিবর্তন করে। আমরা `dispatch` ফাংশনের মাধ্যমে রিডিউসারটিকে কল করি, এবং এই ফাংশনটি আমাদের অ্যাপ্লিকেশনটির স্টেট পরিবর্তন করতে সাহায্য করে।
+
+```jsx filename="counterReducer.js"
+export const counterReducer = (state, action) => {
+  switch (action.type) {
+    case "INCRIMENT":
+      return state + 1; // স্টেটকে ১ বাড়িয়ে দেয়
+    case "DECRIMENT":
+      return state - 1; // স্টেটকে ১ কমিয়ে দেয়
+    default:
+      return state; // পূর্বের স্টেটকে অপরিবর্তিত রাখে
+  }
+};
+```
+
+এখন আমরা আমাদের `App` কম্পোনেন্টে `CounterContext.Provider` ব্যবহার করে স্টেট এবং `dispatch` প্রদান করবো:
+
+```jsx filename="App.jsx"
+import React, { useReducer } from "react";
+import Counter from "./Counter";
+import counterReducer from "./counterReducer.js";
+import CounterContext from "./CounterContext.js";
+
+const App = () => {
+  const initialState = 0; // ইনিশিয়াল স্টেট
+  const [count, dispatch] = useReducer(counterReducer, initialState); // রিডিউসার ব্যবহার করে স্টেট এবং ডিসপ্যাচ তৈরি
+
+  return (
+    <CounterContext.Provider value={{ count, dispatch }}>
+      {" "}
+      {/* কনটেক্সটে স্টেট এবং ডিসপ্যাচ প্রদান */}
+      <Counter />
+    </CounterContext.Provider>
+  );
+};
+
+export default App;
+```
+
+এখন আমাদের `Counter` কম্পোনেন্টে আমরা এই কনটেক্সট ব্যবহার করবো।
+
+#### 3. Use Context Anywhere in the Tree
+
+এখন আমরা `Counter` কম্পোনেন্টে `useContext` হুক ব্যবহার করে কনটেক্সট থেকে ডাটা রিসিভ করবো:
+
+```jsx filename="Counter.jsx"
+import { useContext } from "react";
+import CounterContext from "./CounterContext.js";
+
+export default function Counter() {
+  const { count, dispatch } = useContext(CounterContext); // কনটেক্সট থেকে ডাটা রিসিভ
+
+  return (
+    <div>
+      <h1>Count: {count}</h1> {/* বর্তমান কাউন্ট দেখাচ্ছে */}
+      <button onClick={() => dispatch({ type: "INCRIMENT" })}>Increment</button>
+      <button onClick={() => dispatch({ type: "DECRIMENT" })}>Decrement</button>
+    </div>
+  );
+}
+```
+
+এখন যদি আমরা কোডটি রান করি, তাহলে দেখতে পাবো এটি সঠিকভাবে কাজ করছে। এইভাবে আমরা `Reducer` এবং `Context` একত্রিত করে কাজ করতে পারি।
+
+### Moving All Wiring into a Single File - A Better Approach
+
+এখন আমরা আরেকটু সুসংগত পদ্ধতিতে কাজ করবো। আমরা আমাদের কনটেক্সট সংক্রান্ত সমস্ত কাজ একটি আলাদা ফাইলে রাখবো এবং স্টেটগুলোও সেই ফাইল থেকে পরিচালনা করবো।
+
+```jsx filename="CounterProvider.jsx"
+import React, { createContext, useReducer } from "react";
+import counterReducer from "./counterReducer.js";
+
+const CounterContext = createContext(0); // কনটেক্সট তৈরি
+const initialState = 0; // ইনিশিয়াল স্টেট
+
+const CounterProvider = ({ children }) => {
+  const [count, dispatch] = useReducer(counterReducer, initialState); // রিডিউসার ব্যবহার
+
+  return (
+    <CounterContext.Provider value={{ count, dispatch }}>
+      {" "}
+      {/* কনটেক্সট প্রদান */}
+      {children}
+    </CounterContext.Provider>
+  );
+};
+
+export default CounterProvider;
+```
+
+এখন `App` কম্পোনেন্টটি আরও পরিষ্কার এবং সহজ হয়ে যাবে:
+
+```jsx filename="App.jsx"
+import React from "react";
+import Counter from "./Counter";
+import CounterProvider from "./CounterProvider"; // নতুন প্রোভাইডার ইম্পোর্ট
+
+const App = () => {
+  return (
+    <CounterProvider>
+      <Counter />
+    </CounterProvider>
+  );
+};
+
+export default App;
+```
+
+### Creating a Custom Hook
+
+আমরা একটি কাস্টম হুকও তৈরি করতে পারি, যাতে আমরা বারবার `useContext` কল না করতে হয়। এটি আমাদের কোডকে আরও পরিষ্কার এবং ব্যবহারযোগ্য করে তুলবে।
+
+```jsx filename="hooks.js"
+import { useContext } from "react";
+import CounterContext from "./CounterContext.js";
+
+export default function useCounterContext() {
+  return useContext(CounterContext); // কনটেক্সট থেকে ডাটা রিসিভ
+}
+```
+
+এখন আমরা `Counter` কম্পোনেন্টে আমাদের কাস্টম হুক ব্যবহার করতে পারি:
+
+```jsx filename="Counter.jsx"
+import useCounterContext from "./hooks.js";
+
+export default function Counter() {
+  const { count, dispatch } = useCounterContext(); // কাস্টম হুক ব্যবহার করে কনটেক্সট থেকে ডাটা রিসিভ
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => dispatch({ type: "INCRIMENT" })}>Increment</button>
+      <button onClick={() => dispatch({ type: "DECRIMENT" })}>Decrement</button>
+    </div>
+  );
+}
+```
+
+---
+
+### Advanced State Management with Middleware
+
+#### Middleware
+
+`Middleware` হল একটি ফাংশন যা অ্যাপ্লিকেশনের স্টেট আপডেট করার আগে বা পরে একটি নির্দিষ্ট কার্যকলাপ পরিচালনা করে। উদাহরণস্বরূপ, তুমি যদি অ্যাপ্লিকেশনটির মধ্যে API কল করার প্রয়োজনীয়তা অনুভব করো, তাহলে তুমি `middleware` ব্যবহার করে তা সহজে করতে পারো। আমাদের `Counter` অ্যাপ্লিকেশনটিতে একটি সাধারণ `logger` middleware যোগ করা যাক।
+
+#### Creating a Middleware Function
+
+```jsx filename="loggerMiddleware.js"
+const loggerMiddleware = (store) => (next) => (action) => {
+  console.log("Dispatching:", action); // ডিসপ্যাচ হওয়া অ্যাকশন লগ করে
+  const result = next(action); // পরবর্তী Middleware/Reducer কল করে
+  console.log("Next State:", store.getState()); // নতুন স্টেট লগ করে
+  return result; // রিটার্ন করে
+};
+
+export default loggerMiddleware;
+```
+
+#### Using Middleware in the Provider
+
+এখন, আমাদের `CounterProvider` এ `middleware` যোগ করি:
+
+```jsx filename="CounterProvider.jsx"
+import React, { createContext, useReducer } from "react";
+import counterReducer from "./counterReducer.js";
+import loggerMiddleware from "./loggerMiddleware.js";
+
+const CounterContext = createContext(0);
+const initialState = 0;
+
+const CounterProvider = ({ children }) => {
+  const [count, dispatch] = useReducer(counterReducer, initialState);
+
+  const enhancedDispatch = (action) => {
+    loggerMiddleware({ getState: () => count })(dispatch)(action); // middleware কল করা হচ্ছে
+  };
+
+  return (
+    <CounterContext.Provider value={{ count, dispatch: enhancedDispatch }}>
+      {children}
+    </CounterContext.Provider>
+  );
+};
+
+export default CounterProvider;
+```
+
+এখন `dispatch` ফাংশনটি `loggerMiddleware` কে কল করবে, যা আমাদের অ্যাপ্লিকেশনের স্টেট পরিবর্তনের তথ্য লগ করবে।
+
+### Asynchronous Actions with Thunks
+
+যদি তোমার অ্যাপ্লিকেশনটি API-তে কল করার প্রয়োজন হয়, তাহলে তুমি `thunks` ব্যবহার করতে পারো। `thunks` হলো একটি ফাংশন যা অন্যান্য ফাংশনকে রিটার্ন করে, এবং এটি `dispatch` এবং `getState` ফাংশনগুলির অ্যাক্সেস দেয়।
+
+#### Creating an Async Action
+
+প্রথমে, আমাদের একটি অ্যাসিঙ্ক্রোনাস অ্যাকশন তৈরি করতে হবে:
+
+```jsx filename="asyncActions.js"
+export const fetchCount = () => {
+  return (dispatch) => {
+    // এখানে API কল করা হবে
+    setTimeout(() => {
+      dispatch({ type: "INCRIMENT" }); // কিছু সময় পর ইনক্রিমেন্ট করবে
+    }, 1000);
+  };
+};
+```
+
+#### Updating the Provider to Handle Thunks
+
+আমাদের `CounterProvider`-এ `thunks` ব্যবহারের জন্য কিছু পরিবর্তন করতে হবে:
+
+```jsx filename="CounterProvider.jsx"
+import React, { createContext, useReducer } from "react";
+import counterReducer from "./counterReducer.js";
+import loggerMiddleware from "./loggerMiddleware.js";
+import { fetchCount } from "./asyncActions.js";
+
+const CounterContext = createContext(0);
+const initialState = 0;
+
+const CounterProvider = ({ children }) => {
+  const [count, dispatch] = useReducer(counterReducer, initialState);
+
+  const enhancedDispatch = (action) => {
+    if (typeof action === "function") {
+      action(enhancedDispatch); // যদি ফাংশন হয়, তাহলে থাঙ্কস কল করবে
+    } else {
+      loggerMiddleware({ getState: () => count })(dispatch)(action);
+    }
+  };
+
+  return (
+    <CounterContext.Provider value={{ count, dispatch: enhancedDispatch }}>
+      {children}
+    </CounterContext.Provider>
+  );
+};
+
+export default CounterProvider;
+```
+
+#### Using the Async Action in Counter Component
+
+এখন, আমরা `Counter` কম্পোনেন্টে `fetchCount` অ্যাকশনটি ব্যবহার করতে পারি:
+
+```jsx filename="Counter.jsx"
+import useCounterContext from "./hooks.js";
+import { fetchCount } from "./asyncActions.js";
+
+export default function Counter() {
+  const { count, dispatch } = useCounterContext();
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => dispatch(fetchCount())}>Fetch Count</button> {/* অ্যাসিঙ্ক্রোনাস অ্যাকশন কল করা */}
+    </div>
+  );
+}
+```
+
+### Final Thoughts
+
+এখন তুমি দেখতে পাচ্ছো কিভাবে `Reducer` এবং `Context` ব্যবহার করে একটি শক্তিশালী স্টেট ম্যানেজমেন্ট ব্যবস্থা তৈরি করা যায়। আমরা middleware এবং asynchronous actions (thunks) ব্যবহার করে আমাদের অ্যাপ্লিকেশনের ফাংশনালিটি আরও বাড়াতে সক্ষম হয়েছি।
+
+এই ধরনের কনফিগারেশন তোমার অ্যাপ্লিকেশনকে আরও সংগঠিত এবং সহজে রক্ষণাবেক্ষণযোগ্য করে তোলে। এছাড়া, তুমি চাইলে নতুন নতুন ফিচার যোগ করতে পারো এবং তোমার অ্যাপ্লিকেশনটিকে আরও শক্তিশালী করতে পারো।
+
+---
+
+এখন এই অংশগুলি যুক্ত করে তুমি তোমার অ্যাপ্লিকেশনটিকে আরও উন্নত এবং শক্তিশালী করে তুলতে পারবে। যদি আরও কিছু জানতে চাও বা অন্য কোন প্রশ্ন থাকে, তাহলে জানাতে দ্বিধা করো না!
