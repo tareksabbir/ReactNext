@@ -2,3 +2,258 @@
 title: 3.8 Context Api
 description: Wellcome to React Next Documantation Bangla
 ---
+
+import { Step, Steps } from "fumadocs-ui/components/steps";
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Context এর মাধ্যমে ডাটা পাস করা</h1>
+
+যখন তুমি একটি প্যারেন্ট কম্পোনেন্ট থেকে চাইল্ড কম্পোনেন্টে ডাটা পাস করো, তখন সাধারণত তুমি `props` ব্যবহার করো। কিন্তু কখনও কখনও, তোমার চাইল্ড কম্পোনেন্টটি অনেক গভীরে নেস্টেড অবস্থায় থাকে। এই পরিস্থিতিতে, প্যারেন্ট থেকে চাইল্ড কম্পোনেন্টে ডাটা পাঠানোর জন্য অনেকগুলো মধ্যবর্তী কম্পোনেন্টকে শুধুমাত্র কেরিয়ার হিসেবে ব্যবহার করতে হয়। এই পদ্ধতিকে বলা হয় **Props Drilling**।
+
+### Props Drilling সমস্যা
+
+যখন তোমাকে একাধিক কম্পোনেন্টে ডাটা পাস করতে হয় শুধুমাত্র কাঙ্খিত চাইল্ড কম্পোনেন্টে পৌঁছানোর জন্য, তখন এটি খুবই জটিল এবং অস্বস্তিকর হতে পারে। কখনও কখনও এটি বাগ তৈরিতেও সাহায্য করে। এই সমস্যার সমাধানের জন্যই `useContext` হুক তৈরি করা হয়েছে।
+
+### Context কি?
+
+Context হল Props Drilling এর একটি বিকল্প। Context এর মাধ্যমে, তুমি যেসব ডাটা নেস্টেড কম্পোনেন্টে পাঠাতে চাও, সেগুলোকে একটি আলাদা জায়গায় পরিচালনা করতে পারো এবং Context এর Provider এর মাধ্যমে কম্পোনেন্টের কাছে পাঠাতে পারো।
+
+### Context ব্যবহারের পদক্ষেপ
+
+`useContext` হুক ব্যবহার করতে আমাদের তিনটি পদক্ষেপ অনুসরণ করতে হবে:
+
+1. **Context তৈরি করা**
+2. **Provider এর মাধ্যমে Context ডাটা প্রদান করা**
+3. **কম্পোনেন্টের মধ্যে Context ব্যবহার করা**
+
+<Steps>
+<Step>
+### ১. Context তৈরি করা
+
+প্রথমে আমাদের একটি Context তৈরি করতে হবে। ধরো, আমরা একটি কাউন্টার অ্যাপ্লিকেশন তৈরি করছি:
+
+```jsx filename="counterContext.js"
+import { createContext } from "react";
+
+export const CounterContext = createContext(0); // Default value is 0
+```
+
+এখানে, আমরা `CounterContext` তৈরি করেছি এবং এর ডিফল্ট মান `0` নির্ধারণ করেছি।
+
+</Step>
+<Step>
+### ২. Provider এর মাধ্যমে Context ডাটা প্রদান করা
+
+এরপর, যেই কম্পোনেন্টে আমরা Context এর মান এক্সেস করতে চাই, তার প্যারেন্ট কম্পোনেন্টকে `Context.Provider` দিয়ে র‌্যাপ করতে হবে এবং ডাটা `value={}` অ্যাট্রিবিউটের মাধ্যমে পাস করতে হবে।
+
+```jsx filename="App.jsx"
+import { CounterContext } from "./counterContext.js";
+
+const countValue = 3; // Value to be shared
+
+export default function App() {
+  return (
+    <section className="section">
+      <CounterContext.Provider value={countValue}>
+        {children}
+      </CounterContext.Provider>
+    </section>
+  );
+}
+```
+
+এখানে, `countValue` আমাদের দেওয়া ডাটা যা আমরা Context এর মাধ্যমে শেয়ার করছি।
+
+</Step>
+<Step>
+### ৩. কম্পোনেন্টের মধ্যে Context ব্যবহার করা
+
+এখন আমরা যেই কম্পোনেন্টে ডাটা প্রয়োজন, সেখানে `useContext` ব্যবহার করে সেই ডাটা এক্সেস করতে পারি।
+
+```jsx filename="Counter.jsx"
+import { useContext } from "react";
+import { CounterContext } from "./counterContext.js";
+
+export default function Counter() {
+  const countValue = useContext(CounterContext); // Accessing context value
+
+  return (
+    <div>
+      <h1>Count Value is: {countValue}</h1>
+    </div>
+  );
+}
+```
+
+এখানে, `useContext` ব্যবহার করে আমরা `CounterContext` থেকে ডাটা এক্সেস করছি এবং তা আমাদের কম্পোনেন্টে দেখাচ্ছি।
+
+</Step>
+</Steps>
+
+### একই কম্পোনেন্ট থেকে Context ব্যবহার ও প্রদান
+
+আগের উদাহরণে, আমরা দেখেছি যে কিভাবে প্যারেন্ট কম্পোনেন্টে `Context.Provider` দিয়ে ডাটা পাস করা যায় এবং চাইল্ড কম্পোনেন্টে `useContext` ব্যবহার করে ডাটা এক্সেস করা যায়।
+
+কিন্তু তুমি একই কম্পোনেন্টের মধ্যে `useContext` ব্যবহার করে ডাটা ধরতেও পারো এবং আবার সেই কম্পোনেন্ট থেকেই ডাটা চাইল্ড কম্পোনেন্টে পাঠাতেও পারো। উদাহরণস্বরূপ:
+
+```jsx filename="App.jsx"
+import { CounterContext } from "./counterContext.js";
+import { useContext } from "react";
+
+export default function App() {
+  const count = useContext(CounterContext); // Accessing context value
+
+  return (
+    <section className="section">
+      <CounterContext.Provider value={count + 1}>
+        {children}
+      </CounterContext.Provider>
+    </section>
+  );
+}
+```
+
+এখানে, আমরা `count` এর মান ব্যবহার করে `CounterContext.Provider` এর মাধ্যমে ডাটা পাঠাচ্ছি।
+
+### Context এর মাধ্যমে নেস্টেড কম্পোনেন্টে পাস করা
+
+যদি তোমার একাধিক Context থাকে এবং সেগুলোকে একই কম্পোনেন্টে ব্যবহার করতে হয়, তাহলে তুমি এভাবে নেস্টেড করতে পারো:
+
+```jsx filename="App.jsx"
+import { CounterContext } from "./counterContext.js";
+import { OtherContext } from "./otherContext.js";
+import { useContext } from "react";
+
+export default function App() {
+  const count = useContext(CounterContext); // Accessing first context value
+  const something = "Other value"; // Another context value
+
+  return (
+    <section className="section">
+      <CounterContext.Provider value={count + 1}>
+        <OtherContext.Provider value={something}>
+          {children}
+        </OtherContext.Provider>
+      </CounterContext.Provider>
+    </section>
+  );
+}
+```
+
+এখানে, আমরা একটি Context কে অন্য একটি Context এর মধ্যে নেস্ট করেছি। একটির কারণে অন্যটির উপর কোন প্রভাব পড়বে না।
+
+### Context ব্যবহার করার আগে কিছু বিষয়
+
+Context ব্যবহার করার আগে কিছু বিষয় মাথায় রাখতে হবে। Context এর সহজ ব্যবহার এবং Props পাস করার ঝামেলা থেকে বাঁচার জন্য অনেকসময় আমরা Context ব্যবহার করতে চাই। কিন্তু এটি শুধুমাত্র কিছু কম্পোনেন্টে ডাটা পাস করার ঝামেলা থেকে বাঁচার জন্য ব্যবহার করা উচিত নয়।
+
+#### ১. Props পাস করে শুরু করা
+
+যদি তোমার কম্পোনেন্ট খুব জটিল না হয়, তাহলে প্রথমে Props পাস করেই কাজ করা উচিত। এতে যতগুলো Props পাস করা লাগে, সেটা করো, সমস্যা হবে না।
+
+#### ২. কম্পোনেন্টগুলো বের করে JSX পাস করা
+
+যদি তুমি Children Props এর মাধ্যমে কম্পোনেন্টগুলো সুন্দরভাবে তৈরি করতে পারো, তাহলে দেখবে যে তোমার কম্পোনেন্টগুলোর নেস্টিং অনেক কমে গেছে এবং ডাটা পাস করাও সহজ হয়ে গেছে।
+
+### Context ব্যবহারের উপযুক্ত সময়
+
+Context কখনোই যে কোনও জায়গায় ব্যবহার করা উচিত নয়। যদি এমন কোনো ডাটা থাকে যা তোমার পুরো অ্যাপ্লিকেশনের যেকোনো জায়গায় প্রয়োজন হয়, তাহলে Context ব্যবহারের কথা ভাবতে পারো।
+
+**উপযুক্ত সময়গুলোর মধ্যে রয়েছে:**
+
+- **থিমিং**: অ্যাপ্লিকেশনে কোনো ব্যবহারকারী ইন্টারঅ্যাকশনের জন্য থিম ম্যানেজমেন্টের জন্য Context ব্যবহার করা যেতে পারে।
+- **অথেনটিকেশন**: অ্যাপ্লিকেশনের বিভিন্ন জায়গায় ব্যবহারকারীর তথ্য বা অথেনটিকেশন ডাটা প্রয়োজন হলে Context ব্যবহার করা যেতে পারে।
+- **রাউটিং**: বেশিরভাগ রাউটিং লাইব্রেরিগুলো ব্যাকএন্ডে Context ব্যবহার করে।
+- **জটিল অবস্থার জন্য Reducer**: যদি তোমার অ্যাপ্লিকেশনের অনেক জটিল লজিক পরিচালনা করতে হয়, তাহলে `useReducer` হুকের সাথে `useContext` ব্যবহার করা যেতে পারে।
+
+## Context এর সীমাবদ্ধতা
+
+যদিও `Context` ব্যবহারের অনেক সুবিধা রয়েছে, তবে কিছু সীমাবদ্ধতা ও কিছুর প্রতি সতর্ক থাকা জরুরি:
+
+### ১. রেন্ডারিং পারফরম্যান্স
+
+`Context` পরিবর্তন হলে, যে কম্পোনেন্টটি এই `Context` ব্যবহার করছে সেটি পুনরায় রেন্ডার হবে। তাই যদি তোমার `Context` এর মান খুবই দ্রুত পরিবর্তিত হয়, তাহলে তা পারফরম্যান্সে নেতিবাচক প্রভাব ফেলতে পারে। এই পরিস্থিতিতে, `React.memo` ব্যবহার করে কম্পোনেন্টগুলোকে অপ্টিমাইজ করা যেতে পারে।
+
+### ২. ডিবাগিং জটিলতা
+
+`Context` ব্যবহারে যদি অনেক স্তরের কম্পোনেন্ট থাকে, তাহলে এটি ডিবাগিংকে জটিল করে তুলতে পারে। তুমি সহজেই ভুলে যেতে পারো কোন কম্পোনেন্টটি কোন `Context` ব্যবহার করছে।
+
+### ৩. ব্যবহারের সীমাবদ্ধতা
+
+`Context` ব্যবহার করলে কেবলমাত্র নির্দিষ্ট ডাটা ভাগাভাগির কাজ করাই উচিত। যদি তোমার কম্পোনেন্টগুলো খুবই বিচ্ছিন্ন এবং আলাদা, তাহলে `Context` ব্যবহার করা উচিত নয়।
+
+### ৪. একাধিক Context ব্যবহারের জটিলতা
+
+একাধিক `Context` একসাথে ব্যবহার করলে কিছু জটিলতা সৃষ্টি হতে পারে, বিশেষ করে যখন তাদের মধ্যে নির্ভরতাও থাকে।
+
+## Context ব্যবহার করার উদাহরণ
+
+### থিমিং Context
+
+ধরি, তুমি একটি থিমিং অ্যাপ তৈরি করছো। এখানে, তুমি লাইট এবং ডার্ক থিমের জন্য `Context` ব্যবহার করতে পারো। উদাহরণস্বরূপ:
+
+```jsx filename="themeContext.js"
+import { createContext, useState } from "react";
+
+export const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState("light"); // Default theme
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+```
+
+এখানে, আমরা একটি `ThemeProvider` তৈরি করেছি যা আমাদের `theme` এবং `toggleTheme` ফাংশন প্রদান করছে।
+
+### ব্যবহারের উদাহরণ
+
+এখন এই `ThemeContext` ব্যবহার করে, তুমি তোমার অ্যাপের যেকোনো জায়গায় থিম পরিবর্তন করতে পারো:
+
+```jsx filename="ThemeToggleButton.jsx"
+import { useContext } from "react";
+import { ThemeContext } from "./themeContext.js";
+
+export default function ThemeToggleButton() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  return (
+    <button onClick={toggleTheme}>
+      Switch to {theme === "light" ? "dark" : "light"} theme
+    </button>
+  );
+}
+```
+
+এখন, যখনই তুমি বোতামটিতে ক্লিক করবে, এটি থিম পরিবর্তন করবে এবং সব কম্পোনেন্টে সেই পরিবর্তন আপডেট হবে।
+
+## React.memo এর ব্যবহার
+
+যদি তোমার `Context` এর মান দ্রুত পরিবর্তিত হয় এবং তুমি চান যে কিছু নির্দিষ্ট কম্পোনেন্ট পুনরায় রেন্ডার না হোক, তাহলে `React.memo` ব্যবহার করতে পারো:
+
+```jsx filename="ThemedComponent.jsx"
+import { useContext } from "react";
+import { ThemeContext } from "./themeContext.js";
+
+const ThemedComponent = () => {
+  const { theme } = useContext(ThemeContext);
+
+  return <div className={theme}>This is a {theme} themed component!</div>;
+};
+
+export default React.memo(ThemedComponent);
+```
+
+এখানে, `ThemedComponent` কেবল তখনই রেন্ডার হবে যখন `theme` পরিবর্তিত হবে।
+
+## উপসংহার
+
+`Context` ব্যবহারে কিছু বিষয় মাথায় রাখা উচিত। যদিও এটি `Props Drilling` সমস্যার সমাধান দেয়, তবে এর সীমাবদ্ধতা এবং ব্যবহারিক দিকগুলোও বুঝতে হবে। এছাড়া, Context ব্যবহারের বিভিন্ন উদাহরণ এবং প্রেক্ষাপটগুলি জানা তোমার React অ্যাপ্লিকেশনকে আরও কার্যকরী ও সুশৃঙ্খলভাবে পরিচালনা করতে সাহায্য করবে।
+
+আশা করি, তুমি এখন `Context` এর কার্যকারিতা এবং ব্যবহারের বিভিন্ন দিক সম্পর্কে আরও ভালোভাবে ধারণা পেয়েছো!
