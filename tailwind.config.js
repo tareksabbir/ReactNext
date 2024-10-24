@@ -15,9 +15,9 @@ export default {
     createPreset({
       addGlobalColors: true,
       preset: {
-        ...presets.default,
+        ...presets.vitepress,
         dark: {
-          ...presets.default.dark,
+          ...presets.vitepress.dark,
           background: '0 0% 2%',
           foreground: '0 0% 98%',
           popover: '0 0% 4%',
