@@ -4,7 +4,7 @@ description: Wellcome to React Next Documantation Bangla
 ---
 
 import { Step, Steps } from "fumadocs-ui/components/steps";
-import { Tabs } from "fumadocs-ui/components/Tabs ";
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
 ## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">Reducer এবং Context দিয়ে Scaling Up</h1>
 
@@ -19,21 +19,22 @@ import { Tabs } from "fumadocs-ui/components/Tabs ";
 3. **কম্পোনেন্ট ট্রির যেকোনো স্থানে context ব্যবহার করা।**
 
 <Steps>
-<Step>
+  <Step>
     ### Context তৈরি করা (একটি কনটেক্সট তৈরি করা)
 
-    একটি আলাদা ফাইলে একটি কনটেক্সট তৈরি করতে হবে এবং এটি এক্সপোর্ট করতে হবে, যাতে অন্যান্য ফাইল থেকে এটি ইম্পোর্ট করা যায়।
+    একটি আলাদা ফাইলে একটি কনটেক্সট তৈরি করতে হবে এবং এটি এক্সপোর্ট করতে হবে, যাতে অন্যান্য ফাইল থেকে এটি ইম্পোর্ট করা যায়। কনটেক্সট হচ্ছে React-এর একটি বৈশিষ্ট্য যা আমাদের গ্র্যান্ড প্যারেন্ট কম্পোনেন্ট থেকে ডেটা পাঠাতে সাহায্য করে।
 
     ```jsx filename="CounterContext.js"
-    import {createContext} from "react"
-    const CounterContext = createContext(0)
-    export default CounterContext
+    import { createContext } from "react";
+    const CounterContext = createContext(0);
+    export default CounterContext;
     ```
 
-</Step>
+    এখানে, `createContext(0)` ফাংশনটি একটি নতুন কনটেক্সট তৈরি করছে যার ডিফল্ট ভ্যালু ০। এটি পরবর্তী ধাপে ব্যবহৃত হবে।
 
-<Step>
+  </Step>
 
+  <Step>
     ### Reducer তৈরি করা এবং Provider এর মাধ্যমে state এবং dispatch প্রদান করা (একটি রিডিউসার তৈরি করতে হবে)
 
     আমাদের একটি Reducer তৈরি করতে হবে। এই Reducer এর `state` এবং `dispatch` ফাংশনগুলোকে আমাদের যে কম্পোনেন্টের প্রয়োজন হবে, সেগুলোর মেইন প্যারেন্টে পাঠাতে হবে। এতে সব নেস্টেড চাইল্ড কম্পোনেন্ট সেই ডাটা এক্সেস করতে পারবে।
@@ -41,136 +42,153 @@ import { Tabs } from "fumadocs-ui/components/Tabs ";
     কিভাবে Reducer তৈরি করতে হয় তা জানতে [এখানে ক্লিক করুন](https://reactive-accelarator.vercel.app/reactive-accilarator/React-js/module-3/extracting-state-logic-into-reducer)
 
     <Tabs items={["App.jsx", "Counter.jsx", "CounterContext.js", "counterReducer.js"]}>
-        <Tabs.Tab>
-            ```jsx {3,4,7,8,11,12,13}
-            import React, { useReducer } from 'react';
-            import Counter from "./Counter";
-            import counterReducer from "./CounterReducer.js";
-            import CounterContext from "./CounterContext.js";
+       <Tab value="App.jsx">
+       ```jsx
+        import React, { useReducer } from 'react';
+        import Counter from "./Counter";
+        import counterReducer from "./CounterReducer.js";
+        import CounterContext from "./CounterContext.js";
 
-            const App = () => {
-                const initialState = 0;
-                const [count, dispatch] = useReducer(counterReducer, initialState);
-                return (
-                    <div>
-                        <CounterContext.Provider value={{ count, dispatch }}>
-                            <Counter />
-                        </CounterContext.Provider>
-                    </div>
-                );
-            }
+        const App = () => {
+            const initialState = 0;
+            const [count, dispatch] = useReducer(counterReducer, initialState);
+            return (
+                <div>
+                    <CounterContext.Provider value={{ count, dispatch }}>
+                        <Counter />
+                    </CounterContext.Provider>
+                </div>
+            );
+        }
 
-            export default App;
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            export default function Counter() {
-                return (
-                    <button>
-                        <h1>Count: 0</h1>
-                        <button>Incriment</button>
-                        <button>Decriment</button>
-                    </button>
-                );
+        export default App;
+        ```
+      </Tab>
+      <Tab value="Counter.jsx">
+      ```jsx
+
+        export default function Counter() {
+            return (
+                <button>
+                    <h1>Count: 0</h1>
+                    <button>Increment</button>
+                    <button>Decrement</button>
+                </button>
+            );
+        }
+        ```
+      </Tab>
+     <Tab value="CounterContext.js">
+
+      ```jsx
+        import { createContext } from "react";
+        const CounterContext = createContext(0);
+        export default CounterContext;
+
+        ```
+
+    </Tab>
+
+   <Tab value="counterReducer.js">
+   ```jsx
+
+        export const counterReducer = (state, action) => {
+            switch (action.type) {
+                case "INCREMENT":
+                    return state + 1;
+                case "DECREMENT":
+                    return state - 1;
+                default:
+                    return state;
             }
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            import { createContext } from "react";
-            const CounterContext = createContext(0);
-            export default CounterContext;
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            export const counterReducer = (state, action) => {
-                switch (action.type) {
-                    case "INCRIMENT":
-                        return state + 1;
-                    case "DECRIMENT":
-                        return state - 1;
-                    default:
-                        return state;
-                }
-            };
-            ```
-        </Tabs.Tab>
+        };
+
+```
+      </Tab>
     </Tabs>
 
-<Step></Step>
-### Context ব্যবহার করা (কম্পোনেন্ট ট্রির যেকোনো স্থানে কনটেক্সট ব্যবহার করে
-ডাটা রিসিভ করা)
+  </Step>
+
+  <Step>
+    ### Context ব্যবহার করা (কম্পোনেন্ট ট্রির যেকোনো স্থানে কনটেক্সট ব্যবহার করে ডাটা রিসিভ করা)
 
     এখন আমাদের যেসব কম্পোনেন্টে ডাটা প্রয়োজন, সেখানেই আমরা `useContext` ব্যবহার করে ডাটা রিসিভ করতে পারবো। এই উদাহরণের ক্ষেত্রে, আমাদের শুধুমাত্র `Counter` কম্পোনেন্টে ডাটা প্রয়োজন, তাই আমরা এখান থেকে ডাটা রিসিভ করবো।
 
     <Tabs items={["Counter.jsx", "App.jsx", "CounterContext.js", "counterReducer.js"]}>
-        <Tabs.Tab>
-            ```jsx
-            import { useContext } from "react";
-            import CounterContext from "./CounterContext.js";
+     <Tab value="Counter.jsx">
+```jsx
 
-            export default function Counter() {
-                const { count, dispatch } = useContext(CounterContext);
-                return (
-                    <button>
-                        <h1>Count: {count}</h1>
-                        <button onClick={() => dispatch({ type: "INCRIMENT" })}>Incriment</button>
-                        <button onClick={() => dispatch({ type: "DECRIMENT" })}>Decriment</button>
-                    </button>
-                );
+        import { useContext } from "react";
+        import CounterContext from "./CounterContext.js";
+
+        export default function Counter() {
+            const { count, dispatch } = useContext(CounterContext);
+            return (
+                <div>
+                    <h1>Count: {count}</h1>
+                    <button onClick={() => dispatch({ type: "INCREMENT" })}>Increment</button>
+                    <button onClick={() => dispatch({ type: "DECREMENT" })}>Decrement</button>
+                </div>
+            );
+        }
+
+```
+      </Tab>
+    <Tab value="App.jsx">
+```jsx
+
+        import React, { useReducer } from 'react';
+        import Counter from "./Counter";
+        import counterReducer from "./CounterReducer.js";
+        import CounterContext from "./CounterContext.js";
+
+        const App = () => {
+            const initialState = 0;
+            const [count, dispatch] = useReducer(counterReducer, initialState);
+            return (
+                <div>
+                    <CounterContext.Provider value={{ count, dispatch }}>
+                        <Counter />
+                    </CounterContext.Provider>
+                </div>
+            );
+        }
+
+        export default App;
+
+```
+      </Tab>
+
+       <Tab value="CounterContext.js">
+```jsx
+
+        import { createContext } from "react";
+        const CounterContext = createContext(0);
+        export default CounterContext;
+
+```
+      </Tab>
+      <Tab value="counterReducer.js">
+```jsx
+
+        export const counterReducer = (state, action) => {
+            switch (action.type) {
+                case "INCREMENT":
+                    return state + 1;
+                case "DECREMENT":
+                    return state - 1;
+                default:
+                    return state;
             }
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx {3,4,7,8,11,12,13}
-            import React, { useReducer } from 'react';
-            import Counter from "./Counter";
-            import counterReducer from "./CounterReducer.js";
-            import CounterContext from "./CounterContext.js";
+        };
 
-            const App = () => {
-                const initialState = 0;
-                const [count, dispatch] = useReducer(counterReducer, initialState);
-                return (
-                    <div>
-                        <CounterContext.Provider value={{ count, dispatch }}>
-                            <Counter />
-                        </CounterContext.Provider>
-                    </div>
-                );
-            }
-
-            export default App;
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            import { createContext } from "react";
-            const CounterContext = createContext(0);
-            export default CounterContext;
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            export const counterReducer = (state, action) => {
-                switch (action.type) {
-                    case "INCRIMENT":
-                        return state + 1;
-                    case "DECRIMENT":
-                        return state - 1;
-                    default:
-                        return state;
-                }
-            };
-            ```
-        </Tabs.Tab>
+```
+      </Tab>
     </Tabs>
 
     এখন যদি আমরা কোড রান করি, দেখবো এটি পারফেক্টলি কাজ করছে। মূলত এই হলো তিনটি ধাপ, এই তিনটি ধাপেই আমরা Reducer এর সাথে Context ব্যবহার করতে পারি।
 
-</Step>
+  </Step>
 </Steps>
 
 ### সব কিছুকে একটি ফাইলে স্থানান্তরিত করা - একটি ভালো পদ্ধতি
@@ -178,174 +196,220 @@ import { Tabs } from "fumadocs-ui/components/Tabs ";
 এখন আমরা আরেকটি সুন্দর পদ্ধতিতে Reducer এর সাথে Context ব্যবহার করবো। আমরা আমাদের Context সম্পর্কিত সমস্ত কাজকে একটি আলাদা ফাইলে রাখতে পারি এবং সেখান থেকেই স্টেটগুলোও ম্যানেজ করতে পারি।
 
 <Tabs items={["App.jsx", "CounterProvider.jsx", "counterReducer.js", "Counter.jsx"]}>
-    <Tabs.Tab>
-        ```jsx {3,7,8,9}
-        import React from 'react';
-        import Counter from "./Counter";
-        import CounterProvider from "./CounterProvider";
+ <Tab value="App.jsx">
+```jsx
 
-        const App = () => {
-            return (
-                <div>
-                    <CounterProvider>
-                        <Counter />
-                    </CounterProvider>
-                </div>
-            );
-        }
+       import React from 'react';
+       import Counter from "./Counter";
+       import CounterProvider from "./CounterProvider";
 
-        export default App;
-        ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            import React from 'react';
-            import { createContext, useReducer } from "react";
-            import counterReducer from "./counterReducer.js";
+       const App = () => {
+        return (
+            <div>
+                <CounterProvider>
+                    <Counter />
+                </CounterProvider>
+            </div>
+        );
+    }
 
-            const CounterContext = createContext(0);
-            const initialState = 0;
+    export default App;
 
-            const CounterProvider = ({ children }) => {
-                const [count, dispatch] = useReducer(counterReducer, initialState);
-                return (
-                    <CounterContext.Provider value={{ count, dispatch }}>
-                        {children}
-                    </CounterContext.Provider>
-                );
-            }
+```
+    </Tab>
 
-            export default CounterProvider;
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            export const counterReducer = (state, action) => {
-                switch (action.type) {
-                    case "INCRIMENT":
-                        return state + 1;
-                    case "DECRIMENT":
-                        return state - 1;
-                    default:
-                        return state;
-                }
-            };
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            import { useContext } from "react";
-            import CounterContext from "./CounterContext.js";
+   <Tab value="CounterProvider.js">
+```jsx
 
-            export default function Counter() {
-                const { count, dispatch } = useContext(CounterContext);
-                return (
-                    <button>
-                        <h1>Count: {count}</h1>
-                        <button onClick={() => dispatch({ type: "INCRIMENT" })}>Incriment</button>
-                        <button onClick={() => dispatch({ type: "DECRIMENT" })}>Decriment</button>
-                    </button>
-                );
-            }
-            ```
-        </Tabs.Tab>
-    </Tabs>
+      import React from 'react';
+      import { createContext, useReducer } from "react";
+      import counterReducer from "./counterReducer.js";
+
+      const CounterContext = createContext(0);
+      const initialState = 0;
+
+      const CounterProvider = ({ children }) => {
+          const [count, dispatch] = useReducer(counterReducer, initialState);
+          return (
+              <CounterContext.Provider value={{ count, dispatch }}>
+                  {children}
+              </CounterContext.Provider>
+          );
+      }
+
+      export default CounterProvider;
+
+```
+    </Tab>
+
+<Tab value="counterReducer.js">
+```jsx
+
+      export const counterReducer = (state, action) => {
+          switch (action.type) {
+              case "INCREMENT":
+                  return state + 1;
+              case "DECREMENT":
+                  return state - 1;
+              default:
+                  return state;
+          }
+      };
+
+```
+    </Tab>
+
+ <Tab value="Counter.jsx">
+```jsx
+
+      import { useContext } from "react";
+      import CounterContext from "./CounterContext.js";
+
+      export default function Counter() {
+          const { count, dispatch } = useContext(CounterContext);
+          return (
+              <div>
+                  <h1>Count: {count}</h1>
+                  <button onClick={() => dispatch({ type: "INCREMENT" })}>Increment</button>
+                  <button onClick={() => dispatch({ type: "DECREMENT" })}>Decrement</button>
+              </div>
+          );
+      }
+
+```
+
+    </Tab>
+
+</Tabs>
 
 এভাবে আমাদের মেইন প্যারেন্ট কম্পোনেন্ট থেকে সমস্ত কিছু সরিয়ে নিয়ে আমরা একটি আলাদা ফাইলে ম্যানেজ করতে পারি।
 
 এছাড়াও, আমরা **Context কে বার বার কল না করে** একটি আলাদা কাস্টম হুক বানিয়ে নিতে পারি, যা আমাদের কোডের পুনরাবৃত্তি কমাতে সাহায্য করবে।
 
-<Tabs items={
+<Tabs items={["App.jsx", "CounterProvider.jsx", "counterReducer.js", "Counter.jsx", "useCounter.js"]}>
+    <Tab value="App.jsx">
 
-["App.jsx", "CounterProvider.jsx", "counterReducer.js", "Counter.jsx", "useCounter.js"]}>
+        ```jsx
+            import React from 'react';
+            import Counter from "./Counter";
+            import CounterProvider from "./CounterProvider";
 
-<Tabs.Tab>
-```jsx {3,7,8,9}
-import React from 'react';
-import Counter from "./Counter";
-import CounterProvider from "./CounterProvider";
+            const App = () => {
+                return (
+                    <div>
+                        <CounterProvider>
+                            <Counter />
+                        </CounterProvider>
+                    </div>
+                );
+            }
 
-        const App = () => {
+            export default App;
+        ```
+    </Tab>
+
+    <Tab value="CounterProvider.jsx">
+      ```jsx
+        import React from 'react';
+        import { createContext, useReducer } from "react";
+        import counterReducer from "./counterReducer.js";
+
+        const CounterContext = createContext(0);
+        const initialState = 0;
+
+        const CounterProvider = ({ children }) => {
+            const [count, dispatch] = useReducer(counterReducer, initialState);
             return (
-                <div>
-                    <CounterProvider>
-                        <Counter />
-                    </CounterProvider>
-                </div>
+                <CounterContext.Provider value={{ count, dispatch }}>
+                    {children}
+                </CounterContext.Provider>
             );
         }
 
-        export default App;
-        ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            import React from 'react';
-            import { createContext, useReducer } from "react";
-            import counterReducer from "./counterReducer.js";
+        export default CounterProvider;
+      ```
+       </Tab>
 
-            const CounterContext = createContext(0);
-            const initialState = 0;
+  <Tab value="counterReducer.js">
+```jsx
 
-            const CounterProvider = ({ children }) => {
-                const [count, dispatch] = useReducer(counterReducer, initialState);
-                return (
-                    <CounterContext.Provider value={{ count, dispatch }}>
-                        {children}
-                    </CounterContext.Provider>
-                );
-            }
+      export const counterReducer = (state, action) => {
+          switch (action.type) {
+              case "INCREMENT":
+                  return state + 1;
+              case "DECREMENT":
+                  return state - 1;
+              default:
+                  return state;
+          }
+      };
 
-            export default CounterProvider;
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            export const counterReducer = (state, action) => {
-                switch (action.type) {
-                    case "INCRIMENT":
-                        return state + 1;
-                    case "DECRIMENT":
-                        return state - 1;
-                    default:
-                        return state;
-                }
-            };
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            import { useContext } from "react";
-            import CounterContext from "./CounterContext.js";
+```
+    </Tab>
 
-            export default function Counter() {
-                const { count, dispatch } = useContext(CounterContext);
-                return (
-                    <button>
-                        <h1>Count: {count}</h1>
-                        <button onClick={() => dispatch({ type: "INCRIMENT" })}>Incriment</button>
-                        <button onClick={() => dispatch({ type: "DECRIMENT" })}>Decriment</button>
-                    </button>
-                );
-            }
-            ```
-        </Tabs.Tab>
-        <Tabs.Tab>
-            ```jsx
-            import { useContext } from "react";
-            import CounterContext from "./CounterContext.js";
+<Tab value="Counter.jsx">
+```jsx
 
-            const useCounter = () => {
-                return useContext(CounterContext);
-            };
+      import { useContext } from "react";
+      import CounterContext from "./CounterContext.js";
 
-            export default useCounter;
-            ```
-        </Tabs.Tab>
-    </Tabs>
+      export default function Counter() {
+          const { count, dispatch } = useContext(CounterContext);
+          return (
+              <div>
+                  <h1>Count: {count}</h1>
+                  <button onClick={() => dispatch({ type: "INCREMENT" })}>Increment</button>
+                  <button onClick={() => dispatch({ type: "DECREMENT" })}>Decrement</button>
+              </div>
+          );
+      }
+
+```
+    </Tab>
+
+<Tab value="useCounter.js">
+```jsx
+
+      import { useContext } from "react";
+      import CounterContext from "./CounterContext.js";
+
+      const useCounter = () => {
+          const context = useContext(CounterContext);
+          if (!context) {
+              throw new Error("useCounter must be used within a CounterProvider");
+          }
+          return context;
+      }
+
+      export default useCounter;
+
+```
+    </Tab>
+
+</Tabs>
+
+এখন আমরা `useCounter` হুক ব্যবহার করে যেকোনো কম্পোনেন্টে সেই কনটেক্সটের ডেটা এক্সেস করতে পারি।
+
+**অন্য যেকোনো কম্পোনেন্ট থেকে কনটেক্সট ব্যবহার করা**
+
+এখন যে কোন কম্পোনেন্টে আমরা `useCounter` ব্যবহার করে ডেটা নিয়ে আসতে পারি।
+
+```jsx
+import React from "react";
+import useCounter from "./useCounter.js";
+
+const SomeComponent = () => {
+  const { count, dispatch } = useCounter();
+  return (
+    <div>
+      <h1>Count from SomeComponent: {count}</h1>
+      <button onClick={() => dispatch({ type: "INCREMENT" })}>Increment</button>
+    </div>
+  );
+};
+
+export default SomeComponent;
+```
 
 এখন, `Counter` কম্পোনেন্টের পরিবর্তে, আমরা `useCounter` হুক ব্যবহার করতে পারি, যা আমাদের কোড আরও পরিষ্কার এবং কার্যকর করবে।
-
----
-
-এইভাবে, তুমি দেখতে পারো কিভাবে `reducer` এবং `context` একত্রে ব্যবহার করে আমরা React-এ স্টেট ম্যানেজমেন্টকে সহজ এবং কার্যকরভাবে করতে পারি। আশা করি, এই ব্যাখ্যা এবং কোড উদাহরণগুলো তোমার কাজে আসবে!
+````
