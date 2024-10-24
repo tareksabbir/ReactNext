@@ -3,11 +3,11 @@ title: 1.10 Rendering List
 description: Wellcome to React Next Documantation Bangla
 ---
 
-## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">রিয়াক্টে লিস্ট রেন্ডারিং এবং key এর ব্যাবহার</h1>
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">রিয়াক্টে লিস্ট রেন্ডারিং এবং key এর ব্যাবহার</h1>
 
 React-এ ডেটার একটি তালিকা বা `Array` থেকে ডেটা রেন্ডার করা একটি সাধারণ ও প্রয়োজনীয় কাজ। আমরা সাধারণত `map`, `filter`, এবং অন্যান্য লজিকাল ফাংশন ব্যবহার করে ডেটা উপস্থাপন করি। এই প্রক্রিয়াটি UI-তে ডাইনামিক তথ্য উপস্থাপন করতে সহায়তা করে।
 
-## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">লিস্ট রেন্ডারিং উদাহরণ</h1>
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">লিস্ট রেন্ডারিং উদাহরণ</h1>
 
 লিস্টের উপাদানগুলি রেন্ডার করার জন্য, আমরা `map` ফাংশন ব্যবহার করতে পারি। নিচে একটি উদাহরণ দেওয়া হল যেখানে ব্যবহারকারীদের একটি তালিকা রেন্ডার করা হচ্ছে:
 
@@ -28,7 +28,7 @@ export function ListOfUser() {
 - **`map` ফাংশন:** `map` ফাংশন ব্যবহার করে, প্রতিটি ব্যবহারকারীকে `<li>` ট্যাগে রেন্ডার করা হচ্ছে। `map` ফাংশন প্রতিটি উপাদানের জন্য একটি নতুন লিস্ট উপাদান তৈরি করে এবং সেই উপাদানগুলিকে `<ul>` ট্যাগের মধ্যে রিটার্ন করা হচ্ছে।
 - **`key` প্রপার্টি:** React-এ তালিকা রেন্ডার করার সময় প্রতিটি উপাদানের জন্য একটি ইউনিক `key` প্রদান করা আবশ্যক।
 
-## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">key এর ব্যাবহার</h1>
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">key এর ব্যাবহার</h1>
 
 React-এ লিস্ট অফ আইটেম রেন্ডার করার সময়, প্রতিটি এলিমেন্টে একটি `key` প্রপার্টি অবশ্যই থাকতে হবে। `key` রেন্ডারিং পারফরম্যান্স উন্নত করতে এবং DOM আপডেটের সময় উপাদানগুলোকে সঠিকভাবে ট্র্যাক করতে সাহায্য করে।
 
@@ -60,7 +60,7 @@ export function ListOfUser() {
 - **`key` প্রপার্টি:** `person.id` কে `key` হিসেবে ব্যবহার করা হয়েছে। এটি নিশ্চিত করে যে প্রতিটি `<li>` উপাদান ইউনিক এবং React সহজে আইটেমগুলোকে ট্র্যাক করতে পারে।
 - **পারফরম্যান্স:** `key` ব্যবহার করলে React প্রক্রিয়াকরণের সময় পারফরম্যান্স বৃদ্ধি পায় কারণ এটি জানে কোন উপাদানগুলিতে পরিবর্তন হয়েছে এবং কিভাবে আপডেট করতে হবে।
 
-## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">key কিভাবে পেতে পারি?</h1>
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">key কিভাবে পেতে পারি?</h1>
 
 আমরা বিভিন্ন উপায়ে `key` তৈরি করতে পারি, যেমন:
 
@@ -95,7 +95,7 @@ export function ListOfUser() {
 - **`uuid` লাইব্রেরি:** এখানে `uuid` লাইব্রেরি ব্যবহার করে প্রতিটি ব্যবহারকারীর জন্য একটি ইউনিক `id` তৈরি করা হয়েছে।
 - **পারফরম্যান্স এবং ইউনিকনেস:** প্রতিটি `id` ইউনিক এবং নিশ্চিত করে যে React সঠিকভাবে আইটেমগুলোকে ট্র্যাক করতে পারে।
 
-## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">রুলস অফ key</h1>
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">রুলস অফ key</h1>
 
 React-এ `key` ব্যবহার করার কিছু নিয়ম আছে:
 
@@ -126,7 +126,7 @@ export function ListOfUser() {
 
 - **ইনডেক্স ব্যবহার:** এখানে `index` ব্যবহার করা হয়েছে `key` হিসেবে, যা একটি খারাপ অভ্যাস। এই পদ্ধতি ব্যবহার করা উচিত নয়, কারণ যদি Array পরিবর্তিত হয়, React সঠিকভাবে আইটেমগুলোকে ট্র্যাক করতে পারে না।
 
-## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-4xl pt-2">রিয়াক্টে key এর প্রয়োজনীয়তা</h1>
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">রিয়াক্টে key এর প্রয়োজনীয়তা</h1>
 
 React-এ `key` প্রয়োজন কারণ এটি প্রতিটি আইটেমকে ইউনিকভাবে সনাক্ত করতে সাহায্য করে। যখনই লিস্ট থেকে একটি আইটেম মুছে ফেলা হয় বা তালিকায় কোন পরিবর্তন হয়, তখন React সহজে বুঝতে পারে কোন আইটেমে পরিবর্তন হয়েছে। এটি UI-কে দ্রুত এবং কার্যকরভাবে আপডেট করতে সাহায্য করে।
 
