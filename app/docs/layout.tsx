@@ -5,12 +5,11 @@ import { source } from "@/app/source";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <DocsLayout tree={source.pageTree} {...baseOptions}>
+    <DocsLayout tree={source.pageTree} {...baseOptions} >
       <span
         className="absolute inset-0 z-[-1] h-[64rem] max-h-screen overflow-hidden"
         style={{
           backgroundImage:
-            // "radial-gradient(49.63% 57.02% at 58.99% -7.2%,hsl(218, 27%, 11%), transparent 100%)",
             "radial-gradient(49.63% 57.02% at 58.99% -7.2%, hsl(var(--primary)/0.1) 39.4%, transparent 100%)",
         }}
       >
