@@ -5,7 +5,7 @@ import { source } from "@/app/source";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <DocsLayout tree={source.pageTree} {...baseOptions} >
+    <DocsLayout tree={source.pageTree} {...baseOptions}>
       <span
         className="absolute inset-0 z-[-1] h-[64rem] max-h-screen overflow-hidden"
         style={{
@@ -99,6 +99,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           </defs>
         </svg>
       </span>
+     
       {children}
     </DocsLayout>
   );
