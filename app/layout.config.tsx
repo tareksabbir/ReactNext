@@ -20,4 +20,8 @@ export const baseOptions: HomeLayoutProps = {
       active: "nested-url",
     },
   ],
+  
+  githubUrl: 'https://github.com/tareksabbir',
+
+
 };
