@@ -1,5 +1,6 @@
 import { type HomeLayoutProps } from "fumadocs-ui/home-layout";
-import Logo from '@/public/logo.svg';
+import Logo from "./components/Logo";
+
 
 /**
  * Shared layout configurations
@@ -10,7 +11,7 @@ import Logo from '@/public/logo.svg';
  */
 export const baseOptions: HomeLayoutProps = {
   nav: {
-    title: "ReactNext",
+    title: <Logo></Logo>,
   },
   links: [
     {
