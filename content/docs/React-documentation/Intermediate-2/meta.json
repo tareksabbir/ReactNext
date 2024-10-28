@@ -1,0 +1,13 @@
+{
+  "title": "Intermediate-2",
+  "pages": [
+    "4.1-referencing-values",
+    "4.2-dom-with-refs",
+    "4.3-forwarding-refs",
+    "4.4-UseImperativeHandle",
+    "4.5-flushing-state-updates",
+    "4.6-how-to-write-effects",
+    "4.7-handling-effects",
+    "4.8-fetching-data"
+  ]
+}
