@@ -1,0 +1,195 @@
+---
+title: 4.1 Referencing values
+description: Welcome to React Next Documantation Bangla
+---
+
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">এই পার্টে আমরা সর্বপ্রথম `useRef` হুক নিয়ে কথা বলবো।</h1>
+
+রিয়াক্টে আমরা আমাদের সকল কিছুই সাধারণত স্টেট দিয়ে ম্যানেজ করতে পারি। কিন্তু কখনো এমন সময় আসে, যখন আমাদের সরাসরি `HTML DOM Element` মডিফাই করতে হয়। এই কাজ আমরা স্টেট দিয়ে করতে পারবো না, কারণ স্টেট দিয়ে আমরা কেবলমাত্র রিয়াক্টের নিজস্ব ডেটা ম্যানেজ করতে পারি। সেক্ষেত্রে আমাদের `DOM` সরাসরি মডিফাই করতে হবে, যেখানে রিয়াক্ট আমাদেরকে `useRef` নামে একটি হুক দিয়েছে।
+
+এই `useRef` হুকটি আমাদেরকে `DOM` বা যেকোনো ভ্যালু মেমোরিতে ধরে রাখতে সাহায্য করে, যা আমরা চাইলে পড়তে পারি, কিন্তু সেটার কোন রি-রেন্ডার হয় না। তবে মনে রাখতে হবে, `useRef` কে ওভার ইউজ করা যাবে না কারণ এটি রিয়াক্টের কন্ট্রোলের বাইরে চলে যায়।
+
+এবার চল আমরা ধাপে ধাপে `useRef` নিয়ে কথা বলি।
+
+### Referencing Values with Refs
+
+যখন আমাদের কোন মান ধরে রাখা দরকার কিন্তু সেটি পরিবর্তন হলেও রি-রেন্ডার দরকার নেই, সেই পরিস্থিতিতে আমরা `useRef` ব্যবহার করবো।
+
+#### Adding a ref to your component (কিভাবে `useRef` ব্যবহার করা যায়)
+
+- **প্রথমে আমাদের `useRef` কে রিয়াক্ট থেকে ইম্পোর্ট করে নিতে হবে**:
+
+  ```jsx
+  import { useRef } from "react";
+  ```
+
+- **তারপর আমাদের কম্পোনেন্টে `useRef` কল করতে হবে এবং একটি ইনিশিয়াল ভ্যালু দিতে হবে**:
+
+  ```jsx
+  const ref = useRef(0);
+  ```
+
+এখানে আমরা `ref` এর ইনিশিয়াল ভ্যালু দিয়েছি 0। এই মুহূর্তে `ref` আমাদের একটি অবজেক্ট রিটার্ন করবে, যেখানে `current` নামে একটি ডিফল্ট প্রপার্টি থাকবে। এই `current` এর মধ্যে আমাদের `ref` এর ভ্যালুটা পাওয়া যাবে। যদি আমরা `console.log(ref)` করি, তাহলে আউটপুট পাবো এমন:
+
+```js
+{
+  current: 0; // যেই ইনিশয়াল ভ্যালু দিয়েছিলাম, সেটাই এখানে রিটার্ন হচ্ছে।
+}
+```
+
+আমরা `ref.current` এর ভ্যালু চাইলেই `read/write` করতে পারি। অর্থাৎ, চাইলে `ref.current` এ নতুন ভ্যালু স্টোর করতে বা সেটা পরিবর্তন করতে পারি, এবং এর কোন ট্র্যাক রিয়াক্ট রাখে না। এজন্য একে বলে `Escape Hatch`, কারণ এটি রিয়াক্টের নিয়ন্ত্রণের বাইরে থাকে।
+
+তবে একটি গুরুত্বপূর্ণ বিষয় হলো, আমরা `ref.current` এর মান সরাসরি UI তে দেখাতে পারবো না। নিচের উদাহরণ দেখো:
+
+```jsx
+import { useRef } from "react";
+
+export default function App() {
+  const ref = useRef("something");
+  return <h1>You are rendering {ref.current} </h1>; // এখানে রিয়াক্ট রেন্ডারিং-এ `ref.current` এর ভ্যালু UI তে দেখানো হয়েছে যা করা যাবেনা।
+}
+```
+
+এখন একটা উদাহরণ দেখাই, যেখানে আমরা `useRef` ঠিকভাবে ব্যবহার করবো।
+
+### উদাহরণ: বাটনে ক্লিক গুনে রাখা
+
+একটি বাটন রাখবো, এবং সেই বাটনে ক্লিক করার সাথে সাথে কতবার ক্লিক হয়েছে তা এলার্টে দেখাবে:
+
+```jsx
+import { useRef } from "react";
+
+export default function App() {
+  const ref = useRef(0);
+
+  function handleCountClick() {
+    ref.current = ref.current + 1;
+    alert(`You clicked the button ${ref.current} times`);
+  }
+
+  return <button onClick={handleCountClick}>Click me to count</button>;
+}
+```
+
+এখানে যেভাবে `useRef` কাজ করছে তা খেয়াল করো:
+
+1. `useRef` এর `ref.current` ভ্যালু পরিবর্তন করা হচ্ছে `handleCountClick` ফাংশনের ভিতরে।
+2. `ref.current` পরিবর্তন করতে `setter function` এর দরকার নেই।
+3. `setter function` না কল করার ফলে আমাদের কম্পোনেন্ট রি-রেন্ডার করছেনা।
+4. রি-রেন্ডার না হলেও `ref.current` এর ভ্যালু পরিবর্তনের পরেই আপডেটেড ভ্যালু পেয়ে যাচ্ছি।
+5. এইভাবে, আমরা `ref` কে `plain javascript object` এর মতো ব্যবহার করছি।
+6. আমাদের `ref.current` এর মান সরাসরি কম্পোনেন্টের UI তে দেখাচ্ছি না। বরং আমরা তা শুধু এলার্টে দেখাচ্ছি।
+
+এই পয়েন্টগুলো `useRef` ব্যবহারের ক্ষেত্রে গুরুত্বপূর্ণ।
+
+নিশ্চিত করি যেন পুরোপুরি বিস্তারিতভাবে সহজভাবে বোঝানো থাকে, কিছু সরলীকরণ আর পরিষ্কার ধাপসহ পুরোটা সাজাই:
+
+---
+
+#### Storing a Reference or Value in a Ref (ref এর মধ্যে কোন রেফারেন্স বা মান সংরক্ষণ করা)
+
+আমরা `useRef` হুকের মাধ্যমে `current` প্রপার্টির মধ্যে একটি রেফারেন্স বা মান সংরক্ষণ করতে পারি, যা কম্পোনেন্টের স্টেট পরিবর্তন হলেও হারিয়ে যায় না। অর্থাৎ, `ref` হলো এমন এক ধরনের স্টোরেজ যা রিয়াক্ট কম্পোনেন্ট যতবার রি-রেন্ডার হোক না কেন, সেই স্টোর করা ডেটা ধরে রাখতে সক্ষম।
+
+চলুন এটি একটি উদাহরণ দিয়ে বুঝে নেই। এখানে আমরা একটি স্টপওয়াচ তৈরি করবো যা স্টার্ট এবং স্টপ করার সাথে সাথে সময় গুনবে এবং UI-তে সেই সময় দেখাবে।
+
+```jsx
+import { useState } from "react";
+
+export default function Stopwatch() {
+  const [startTime, setStartTime] = useState(null); // যখন আমরা স্টার্ট বাটনে ক্লিক করি তখনকার সময় স্টেট দিয়ে ম্যানেজ করছি
+  const [now, setNow] = useState(null); // স্টার্ট করার পর বর্তমান পর্যন্ত কত সময় গেছে সেটি এই স্টেট দিয়ে ট্র্যাক করি
+
+  function handleStart() {
+    setStartTime(Date.now());
+    setNow(Date.now());
+
+    setInterval(() => {
+      setNow(Date.now());
+    }, 10);
+  }
+
+  let secondsPassed = 0;
+  if (startTime != null && now != null) {
+    secondsPassed = (now - startTime) / 1000;
+  }
+
+  return (
+    <>
+      <h1>Time passed: {secondsPassed.toFixed(3)}</h1>
+      <button onClick={handleStart}>Start</button>
+    </>
+  );
+}
+```
+
+#### Interval Clear করার জন্য `useRef` ব্যবহার
+
+এখন আমাদের প্রয়োজন স্টপওয়াচকে বন্ধ করার জন্য `interval` পরিষ্কার করা। কিন্তু এখানে একটি সমস্যা আছে: `interval` টা `handleStart` ফাংশনের ভেতরে ডিফাইন করা আছে, তাই সরাসরি `clearInterval` কল করতে `interval` এর রেফারেন্স আমরা পাবো না। এখানে `useRef` আমাদের এই রেফারেন্স স্টোরেজে সাহায্য করবে।
+
+`ref.current` এর মধ্যে `interval` এর রেফারেন্স স্টোর করে আমরা যে কোনো সময় এটি `clearInterval(ref.current)` দিয়ে পরিষ্কার করতে পারি।
+
+#### কেন `useRef` ব্যবহার জরুরি, সাধারণ ভ্যারিয়েবল কেন না
+
+আমরা যদি জাভাস্ক্রিপ্টের একটি সাধারণ ভ্যারিয়েবলে `interval` রেফারেন্স রাখি, তবে প্রতিবার রি-রেন্ডারের সময় ভ্যারিয়েবলটি নতুনভাবে সেট হয়ে যাবে, এবং আমাদের স্টোর করা মান হারিয়ে যাবে। কিন্তু `useRef` একটি ফাংশন ও রেন্ডারের বাইরে থাকে, তাই কম্পোনেন্ট যতবার রি-রেন্ডার হোক না কেন, `ref.current` এর মান অপরিবর্তিত থাকে। এ কারণে এটি একটি স্টোরেজ হিসেবে কার্যকর।
+
+#### পুরো উদাহরণ `useRef` দিয়ে
+
+```jsx
+import { useState, useRef } from "react";
+
+export default function Stopwatch() {
+  const ref = useRef(null); // interval রেফারেন্স সংরক্ষণের জন্য
+  const [startTime, setStartTime] = useState(null);
+  const [now, setNow] = useState(null);
+
+  function handleStart() {
+    setStartTime(Date.now());
+    setNow(Date.now());
+
+    ref.current = setInterval(() => {
+      setNow(Date.now());
+    }, 10);
+  }
+
+  function handleStop() {
+    clearInterval(ref.current); // interval পরিষ্কার করা হচ্ছে
+  }
+
+  let secondsPassed = 0;
+  if (startTime != null && now != null) {
+    secondsPassed = (now - startTime) / 1000;
+  }
+
+  return (
+    <>
+      <h1>Time passed: {secondsPassed.toFixed(3)}</h1>
+      <button onClick={handleStart}>Start</button>
+      <button onClick={handleStop}>Stop</button>
+    </>
+  );
+}
+```
+
+---
+
+#### Differences Between `refs` and `state` (state এবং ref এর মধ্যে পার্থক্য)
+
+|                                                 Refs                                                  |                              State                               |
+| :---------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------: |
+| `useRef` শুরুতে একটি মান নেয় এবং একটি অবজেক্ট রিটার্ন করে যেখানে `current` নামের প্রপার্টিতে মান থাকে | `useState` একটি স্টেট ভ্যারিয়েবল ও `setter function` রিটার্ন করে |
+|                        ভ্যালু পরিবর্তন হলেও `useRef` রি-রেন্ডার ট্রিগার করেনা                         |             ভ্যালু আপডেট করলে রি-রেন্ডার ট্রিগার করে             |
+|                    `useRef` এর ভ্যালু কোনো setter function ছাড়াই পরিবর্তন করা যায়                     |      `useState` এর ভ্যালু setter function দিয়ে পরিবর্তন হয়       |
+|                     `ref.current` মান কম্পোনেন্ট রেন্ডারিং এ ব্যবহার করা যাবে না                      |             স্টেটের মান সরাসরি UI তে ব্যবহার করা যায়             |
+
+#### When to Use Ref (কখন ref ব্যবহার করা উচিত)
+
+সাধারণত `useRef` কম ব্যবহৃত হয়। তবে যখন রিয়াক্টের কন্ট্রোলের বাইরে যেকোনো কিছু ব্যবহারের প্রয়োজন, যেমন ব্রাউজার API এর সঙ্গে কাজ, তখন `useRef` ব্যবহার করা উচিত।
+
+1. **Timeout / Interval ID সংরক্ষণ করার জন্য**
+2. **DOM elements সংরক্ষণ এবং মডিফাই করার জন্য**
+3. **কোনো অবজেক্ট যা JSX এ দেখানোর প্রয়োজন নেই**
+
+#### Best Practices for Refs
+
+1. **Treat refs as an escape hatch - `ref` কে এক্সটারনাল API এর জন্য ব্যবহার করুন।**
+2. **Don’t read or write ref.current during rendering - রেন্ডারিং এর সময় `ref.current` পড়া বা লেখা উচিত নয়।**
