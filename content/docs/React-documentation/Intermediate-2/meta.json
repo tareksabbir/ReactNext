@@ -8,6 +8,9 @@
     "4.5-flushing-state-updates",
     "4.6-how-to-write-effects",
     "4.7-handling-effects",
-    "4.8-fetching-data"
+    "4.8-fetching-data",
+    "4.9-when-no-need-an-effect",
+    "4.10-the-lifecycle-of-an-Effect",
+    "4.11-effect-react-to-reactive-values"
   ]
 }
