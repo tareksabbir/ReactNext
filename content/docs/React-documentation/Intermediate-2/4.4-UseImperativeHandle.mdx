@@ -3,50 +3,122 @@ title: 4.4 Use Imperative Handle
 description: Welcome to React Next Documantation Bangla
 ---
 
-import { Steps } from "nextra/components";
+import { Step, Steps } from "fumadocs-ui/components/steps";
 
-**`forwardRef` ব্যাবহার করলে আমরা আমদের কম্পোনেন্ট এর সকল এক্সেস প্যারেন্ট কম্পোনেন্ট কে দিয়ে দেই ফরোয়ার্ড করে, কিন্তু আমরা যদি চাই যে না, আমরা `forwardRef` করে রেফারেন্স টা ফরোয়ার্ড করবো ঠিকই কিন্তু সেই সাথে আমরা এটাও বলে দিবো যে সেই রেফারেন্স নিয়ে প্যারেন্ট কম্পোনেন্ট ঠিক কি কি করতে পারবে, মানে হলো আমরা চাইল্ড থেকে প্যারেন্ট কম্পোনেন্ট এর এক্সেস টা লিমিটেড করে দিতে চাচ্ছি, যদি এমনটা করতে চাই তাহলে আমাদেরকে `useImperativeHandle` নামে রিয়াক্টের একটা বিল্ট-ইন হুক ব্যাবহার করতে হবে। আমরা নিচের স্টেপগুলো ফলো করে এটা করতে পারি।**
+## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">useImperativeHandle</h1>
+
+## Controlling Access to Child Component's Methods with `useImperativeHandle`
+
+React-এ `forwardRef` ব্যবহার করে আমরা সহজেই কোনো কাস্টম কম্পোনেন্টের `ref` প্যারেন্ট কম্পোনেন্টে ফরোয়ার্ড করতে পারি। কিন্তু এটি প্যারেন্ট কম্পোনেন্টকে সেই চাইল্ড কম্পোনেন্টের সকল `DOM` নোডের এক্সেস দিয়ে দেয়, যা অনেক সময় অপ্রয়োজনীয় হতে পারে। ধরুন, আমরা শুধু বিশেষ কয়েকটি মেথড এক্সেস করতে দিতে চাই, তাহলে `useImperativeHandle` ব্যবহার করা যায়।
+
+`useImperativeHandle` মূলত `forwardRef`-এর সাথে ব্যবহার করা হয়। এটি চাইল্ড কম্পোনেন্ট থেকে নির্দিষ্ট মেথড বা প্রপার্টি প্যারেন্ট কম্পোনেন্টে প্রকাশ করার জন্য ব্যবহৃত হয়। এভাবে চাইল্ড কম্পোনেন্টটি বাইরে থেকে সীমিত ভাবে নিয়ন্ত্রণ করা যায় এবং কম্পোনেন্টের অভ্যন্তরীণ স্ট্রাকচারও গোপন রাখা সম্ভব।
+
+---
+
+### ব্যবহারের উদ্দেশ্য
+
+React-এর `forwardRef` এবং `useImperativeHandle` ব্যবহারের মাধ্যমে প্যারেন্ট-চাইল্ড কম্পোনেন্টের মধ্যে `DOM` এর এক্সেস নিয়ন্ত্রণ করা যায়।
+
+১. **Encapsulation**: শুধু প্রয়োজনীয় মেথড বা প্রপার্টি প্রকাশ করা, যেন চাইল্ড কম্পোনেন্টের অভ্যন্তরীণ বিষয়গুলো গোপন থাকে।
+২. **Controlled Access**: প্যারেন্ট কম্পোনেন্টে প্রয়োজনীয় কয়েকটি ফাংশনালিটি প্রকাশ করা, যা কম্পোনেন্টের অবাঞ্ছিত মেথডে এক্সেস আটকাতে সাহায্য করে।
+
+### উদাহরণ দিয়ে বোঝা যাক `useImperativeHandle` কীভাবে কাজ করে
+
+---
 
 <Steps>
-### চাইল্ড কম্পোনেন্টের ভিতর একটা `ref` নেয়া লাগবে সেই কম্পোনেন্টের NODE এ চাইল্ড কম্পোনেন্টের `ref` ব্যাবহার করা লাগবে।
+<Step>
+### চাইল্ড কম্পোনেন্টে `ref` তৈরি করা
 
-```jsx {4,8}
+প্রথম ধাপে, চাইল্ড কম্পোনেন্টে `useRef` দিয়ে একটি `ref` তৈরি করা হয় যা সরাসরি চাইল্ড কম্পোনেন্টের `DOM` নোডকে নির্দেশ করে। এই `ref` আমাদের মূল `DOM` এলিমেন্ট ধরতে সাহায্য করে।
+
+**Example:**
+
+```jsx
 import { forwardRef, useRef } from "react";
 
 const MyInput = forwardRef((props, ref) => {
-    const realInputRef = useRef(null);
-    return (
-        <input
-            {...props}
-            ref={realInputRef}
-        />
-    );
+  const realInputRef = useRef(null);
+
+  return <input {...props} ref={realInputRef} />;
 });
 ```
 
-### `useImperativeHandle` হুক এর মাধ্যমে বলে দিতে হবে আমরা কোন কোন বিষয়ের এক্সেস দিতে চাই।
+এখানে `realInputRef` নামে একটি `ref` তৈরি করা হয়েছে। এটিকে আমরা `<input />` এলিমেন্টে প্রয়োগ করেছি, ফলে এটি `input` DOM নোডকে নির্দেশ করছে।
 
-```jsx {7-11}
+<Step></Step>
+
+### Step 2: `useImperativeHandle` দিয়ে প্যারেন্ট কম্পোনেন্টের এক্সেস নিয়ন্ত্রণ করা
+
+এবার আমরা `useImperativeHandle` ব্যবহার করবো, যা নির্দিষ্ট কিছু মেথড বা প্রপার্টি প্রকাশ করে চাইল্ড কম্পোনেন্টের `ref` কন্ট্রোল করতে সাহায্য করে। আমরা এখানে শুধু `focus` মেথড প্যারেন্ট কম্পোনেন্টে অ্যাক্সেসযোগ্য রাখবো।
+
+**Example:**
+
+```jsx
 import { forwardRef, useRef, useImperativeHandle } from "react";
 
 const MyInput = forwardRef((props, ref) => {
-    const realInputRef = useRef(null);
+  const realInputRef = useRef(null);
 
-    // Only expose focus and nothing else
-    useImperativeHandle(ref, () => ({
-        focus() {
-            realInputRef.current.focus();
-        },
-    }));
+  // প্যারেন্ট কম্পোনেন্টকে শুধু focus মেথড অ্যাক্সেসযোগ্য রাখা
+  useImperativeHandle(ref, () => ({
+    focus() {
+      realInputRef.current.focus();
+    },
+  }));
 
-    return (
-        <input
-            {...props}
-            ref={realInputRef}
-        />
-    );
+  return <input {...props} ref={realInputRef} />;
 });
 ```
 
+#### `useImperativeHandle` হুকের প্যারামিটারগুলো:
+
+১. **প্রথম প্যারামিটার (ref)**: `ref` হুকটি চাইল্ড কম্পোনেন্ট থেকে প্যারেন্টে পাঠানো `forwardRef`।
+২. **দ্বিতীয় প্যারামিটার (callback function)**: একটি কলব্যাক ফাংশন, যা একটি অবজেক্ট রিটার্ন করে। এই অবজেক্টের মধ্যে সেই নির্দিষ্ট মেথড বা প্রপার্টি থাকবে যা আমরা প্রকাশ করতে চাই।
+
+এই উদাহরণে, `focus` মেথড প্যারেন্ট কম্পোনেন্টে প্রকাশিত। যখন প্যারেন্ট কম্পোনেন্ট `focus()` কল করবে, তখন এটি চাইল্ড কম্পোনেন্টের `input` ফিল্ডে ফোকাস সেট করবে।
+
+---
+
+</Step>
+<Step>
+
+### Step 3: প্যারেন্ট কম্পোনেন্ট থেকে এক্সেস নিয়ন্ত্রণ পরীক্ষা করা
+
+এখন প্যারেন্ট কম্পোনেন্টে একটি `ref` তৈরি করে সেটি চাইল্ড কম্পোনেন্টে পাঠানো হবে এবং আমরা চাইল্ডের `focus` মেথড অ্যাক্সেস করে দেখবো।
+
+**Example:**
+
+```jsx
+import { useRef } from "react";
+import MyInput from "./MyInput";
+
+export default function MyForm() {
+  const inputRef = useRef(null);
+
+  function handleClick() {
+    // শুধু focus মেথড এক্সেসযোগ্য
+    inputRef.current.focus();
+  }
+
+  return (
+    <>
+      <MyInput ref={inputRef} />
+      <button onClick={handleClick}>Focus the input</button>
+    </>
+  );
+}
+```
+
+এখানে `MyForm` কম্পোনেন্টে `inputRef` নামে একটি `ref` তৈরি করা হয়েছে এবং `MyInput` কম্পোনেন্টে পাঠানো হয়েছে। `handleClick` ফাংশন কল করার মাধ্যমে `inputRef.current.focus()`-এ প্যারেন্ট কম্পোনেন্ট কেবলমাত্র `focus` মেথড এক্সেস করতে পারে, কারণ `useImperativeHandle` এর মাধ্যমে `focus` মেথড প্রকাশিত হয়েছে।
+
+</Step>
 </Steps>
 
+---
+
+### কেন `useImperativeHandle` দরকার?
+
+আমরা চাইলে শুধু `forwardRef` দিয়েই `ref` এক্সেস করতে পারতাম, তবে এতে পুরো DOM নোড প্যারেন্ট কম্পোনেন্টে প্রকাশ পায়। কিন্তু যদি আমরা কোনো সীমাবদ্ধতা রাখতে চাই, তাহলে `useImperativeHandle` ব্যবহার উপকারী। এতে আমাদের কম্পোনেন্টের গোপনীয়তা বজায় থাকে এবং প্যারেন্ট কম্পোনেন্ট শুধু প্রয়োজনীয় মেথড বা প্রপার্টি অ্যাক্সেস করতে পারে।
+
+এই কৌশলটি বিশেষভাবে প্রয়োজনীয় হয় যখন বড় প্রজেক্টে কোনো কম্পোনেন্টের DOM এক্সেস সীমিত করা প্রয়োজন হয়, এবং আমাদের উচিত কম্পোনেন্টকে যতটা সম্ভব encapsulated বা গোপনীয় রাখা।
