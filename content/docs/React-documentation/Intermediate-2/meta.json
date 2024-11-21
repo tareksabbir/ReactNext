@@ -11,6 +11,11 @@
     "4.8-fetching-data",
     "4.9-when-no-need-an-effect",
     "4.10-the-lifecycle-of-an-Effect",
-    "4.11-effect-react-to-reactive-values"
+    "4.11-effect-react-to-reactive-values",
+    "4.12-separating-Events-from-Effects",
+    "4.13-removing-Effect-Dependencies",
+    "4.14-reusing-Logic-with-Custom-Hook",
+    "4.15-performance-Optimization"
+
   ]
 }

@@ -1,6 +1,6 @@
 ---
 title: 2.5 State as a Snapshot
-description: Welcome to React Next Documantation Bangla
+description: Welcome to React Next Documentation Bangla
 ---
 
 ## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">State as a Snapshot</h1>
@@ -95,21 +95,21 @@ React যখন `setNumber(number + 5)` কল করে, তখন সেটি
 import { useState } from "react";
 
 export default function Counter() {
-    const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-    function handleClick() {
-        setCount(count + 1);
-        setCount(count + 1);
-        setCount(count + 1);
-        console.log("Count:", count); 
-    }
+  function handleClick() {
+    setCount(count + 1);
+    setCount(count + 1);
+    setCount(count + 1);
+    console.log("Count:", count);
+  }
 
-    return (
-        <>
-            <h1>{count}</h1>
-            <button onClick={handleClick}>Increase Count</button>
-        </>
-    );
+  return (
+    <>
+      <h1>{count}</h1>
+      <button onClick={handleClick}>Increase Count</button>
+    </>
+  );
 }
 ```
 
@@ -123,21 +123,21 @@ React এই সমস্যার সমাধানের জন্য ফা�
 import { useState } from "react";
 
 export default function Counter() {
-    const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-    function handleClick() {
-        setCount((prevCount) => prevCount + 1);
-        setCount((prevCount) => prevCount + 1);
-        setCount((prevCount) => prevCount + 1);
-        console.log("Count after click:", count); 
-    }
+  function handleClick() {
+    setCount((prevCount) => prevCount + 1);
+    setCount((prevCount) => prevCount + 1);
+    setCount((prevCount) => prevCount + 1);
+    console.log("Count after click:", count);
+  }
 
-    return (
-        <>
-            <h1>{count}</h1>
-            <button onClick={handleClick}>Increase Count</button>
-        </>
-    );
+  return (
+    <>
+      <h1>{count}</h1>
+      <button onClick={handleClick}>Increase Count</button>
+    </>
+  );
 }
 ```
 
@@ -151,20 +151,20 @@ export default function Counter() {
 import { useState } from "react";
 
 export default function AsyncCounter() {
-    const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0);
 
-    async function handleClick() {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 সেকেন্ড অপেক্ষা করো
-        setCount(count + 1);
-        console.log("Count:", count);
-    }
+  async function handleClick() {
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // 1 সেকেন্ড অপেক্ষা করো
+    setCount(count + 1);
+    console.log("Count:", count);
+  }
 
-    return (
-        <>
-            <h1>{count}</h1>
-            <button onClick={handleClick}>Increase Count After 1s</button>
-        </>
-    );
+  return (
+    <>
+      <h1>{count}</h1>
+      <button onClick={handleClick}>Increase Count After 1s</button>
+    </>
+  );
 }
 ```
 
@@ -178,21 +178,21 @@ export default function AsyncCounter() {
 import { useState } from "react";
 
 export default function DependentCounter() {
-    const [count, setCount] = useState(0);
-    const [step, setStep] = useState(1);
+  const [count, setCount] = useState(0);
+  const [step, setStep] = useState(1);
 
-    function handleClick() {
-        setCount(count + step);
-    }
+  function handleClick() {
+    setCount(count + step);
+  }
 
-    return (
-        <>
-            <h1>Count: {count}</h1>
-            <h1>Step: {step}</h1>
-            <button onClick={handleClick}>Increase Count by Step</button>
-            <button onClick={() => setStep(step + 1)}>Increase Step</button>
-        </>
-    );
+  return (
+    <>
+      <h1>Count: {count}</h1>
+      <h1>Step: {step}</h1>
+      <button onClick={handleClick}>Increase Count by Step</button>
+      <button onClick={() => setStep(step + 1)}>Increase Step</button>
+    </>
+  );
 }
 ```
 

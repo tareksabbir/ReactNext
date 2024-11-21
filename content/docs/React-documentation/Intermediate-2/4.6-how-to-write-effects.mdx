@@ -1,6 +1,6 @@
 ---
 title: 4.6 How to write effects
-description: Welcome to React Next Documantation Bangla
+description: Welcome to React Next Documentation Bangla
 ---
 
 import { Step, Steps } from "fumadocs-ui/components/steps";
@@ -37,18 +37,18 @@ import { Step, Steps } from "fumadocs-ui/components/steps";
 ইফেক্ট ডিক্লেয়ার করার জন্য প্রথমে আমাদের কম্পোনেন্টের ভিতর `useEffect` হুককে ইম্পোর্ট করতে হবে। তারপর `useEffect` কে কম্পোনেন্টের টপ লেবেলে কল করতে হবে।
 
 ```jsx
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 const App = () => {
-    useEffect(() => {
-        // effect code will go here
-    }, []);
+  useEffect(() => {
+    // effect code will go here
+  }, []);
 
-    return (
-        <div>
-            <h1>Hello World!</h1>
-        </div>
-    );
+  return (
+    <div>
+      <h1>Hello World!</h1>
+    </div>
+  );
 };
 
 export default App;
@@ -67,29 +67,35 @@ export default App;
 
 ডিপেন্ডেন্সি এড করার জন্য আমাদের ইফেক্টের সেকন্ড প্যারামিটারে কিছু ভ্যালু ([] অথবা অন্যান্য ডিপেন্ডেন্সি) দিতে হয়।
 
-- **যদি আমরা চাই যে প্রতিবার রি-রেন্ডারে ইফেক্ট কল হবে:** 
+- **যদি আমরা চাই যে প্রতিবার রি-রেন্ডারে ইফেক্ট কল হবে:**
+
 ```jsx
 useEffect(() => {
-    // code will go here
+  // code will go here
 });
 ```
+
 এক্ষেত্রে কোনও ডিপেন্ডেন্সি দিতে হয় না।
 
-- **যদি আমরা চাই যে শুধু প্রথম রেন্ডারে ইফেক্ট কল হবে এবং পরবর্তীতে রি-রেন্ডার হলেও আর ইফেক্ট কল হবে না:** 
+- **যদি আমরা চাই যে শুধু প্রথম রেন্ডারে ইফেক্ট কল হবে এবং পরবর্তীতে রি-রেন্ডার হলেও আর ইফেক্ট কল হবে না:**
+
 ```jsx
 useEffect(() => {
-    // code will go here
+  // code will go here
 }, []);
 ```
+
 এক্ষেত্রে সেকন্ড প্যারামিটারে শুধু একটি `[]` দিতে হয়।
 
-- **যদি আমরা চাই যে কম্পোনেন্ট লোড হওয়ার সাথে সাথে একবার রান হবে এবং কোন স্পেসিফিক কিছু চেঞ্জ হলে আবার রান হবে:** 
+- **যদি আমরা চাই যে কম্পোনেন্ট লোড হওয়ার সাথে সাথে একবার রান হবে এবং কোন স্পেসিফিক কিছু চেঞ্জ হলে আবার রান হবে:**
+
 ```jsx
 useEffect(() => {
-    // code will go here
+  // code will go here
 }, [a, b]);
 ```
-এক্ষেত্রে `a` এবং `b` ডিপেন্ডেন্সিতে এড করা হয়েছে। আমরা মাল্টিপল ডিপেন্ডেন্সি এড করতে পারি। 
+
+এক্ষেত্রে `a` এবং `b` ডিপেন্ডেন্সিতে এড করা হয়েছে। আমরা মাল্টিপল ডিপেন্ডেন্সি এড করতে পারি।
 
 রিয়াক্ট প্রতিবার কম্পোনেন্ট রেন্ডার হয়ে যাওয়ার পর চেক করে দেখবে যে সেই ভ্যালুগুলো আগের রেন্ডারে যা ছিল, পরের রেন্ডারে কি তাই আছে নাকি। এটি `Object.is()` মেথডের মাধ্যমে করা হয়। যদি কোনও একটি ভ্যালু চেঞ্জ হয়, তবে রিয়াক্ট ইফেক্টকে আবার কল করবে।
 
@@ -103,33 +109,33 @@ useEffect(() => {
 ধরি, আমাদের একটি চ্যাট অ্যাপ্লিকেশন আছে। যখনই কোনও ইউজার চ্যাট করার জন্য অ্যাপ্লিকেশনটি অন করে, তখন চ্যাট কম্পোনেন্টে ক্লিক করলে ইফেক্টের মাধ্যমে একটি চ্যাট সার্ভারের সাথে কানেকশন ঘটানো হবে।
 
 ```jsx
-import { useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useEffect } from "react";
+import { createConnection } from "./chat.js";
 
 export default function ChatRoom() {
-    useEffect(() => {
-        const connection = createConnection();
-        connection.connect();
-        return () => {
-            connection.disconnect(); // ক্লিন-আপ
-        };
-    }, []);
-    
-    return <h1>Welcome to the chat!</h1>;
+  useEffect(() => {
+    const connection = createConnection();
+    connection.connect();
+    return () => {
+      connection.disconnect(); // ক্লিন-আপ
+    };
+  }, []);
+
+  return <h1>Welcome to the chat!</h1>;
 }
 ```
 
 ```jsx
 export function createConnection() {
-    // বাস্তবভাবে সার্ভারের সাথে কানেক্ট করার জন্য
-    return {
-        connect() {
-            console.log('✅ Connecting...');
-        },
-        disconnect() {
-            console.log('❌ Disconnected.');
-        }
-    };
+  // বাস্তবভাবে সার্ভারের সাথে কানেক্ট করার জন্য
+  return {
+    connect() {
+      console.log("✅ Connecting...");
+    },
+    disconnect() {
+      console.log("❌ Disconnected.");
+    },
+  };
 }
 ```
 
@@ -141,18 +147,18 @@ export function createConnection() {
 
 ```jsx
 useEffect(() => {
-    const connection = createConnection();
-    connection.connect();
-    return () => {
-        connection.disconnect(); // ক্লিন-আপ ফাংশন
-    };
+  const connection = createConnection();
+  connection.connect();
+  return () => {
+    connection.disconnect(); // ক্লিন-আপ ফাংশন
+  };
 }, []);
 ```
 
 </Step>
 </Steps>
 
-###  উপসংহার
+### উপসংহার
 
 `useEffect` হুক রিয়াক্ট কম্পোনেন্টে সাইড ইফেক্ট পরিচালনার জন্য একটি গুরুত্বপূর্ণ টুল। এর মাধ্যমে আমরা সহজে API কল করা, ডাটাবেস এক্সেস করা, বা অন্য যে কোনও এক্সটার্নাল কাজ সম্পন্ন করতে পারি।
 

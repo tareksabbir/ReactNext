@@ -1,197 +1,213 @@
 ---
 title: 4.9 When No need an effect
-description: Welcome to React Next Documantation Bangla
+description: Welcome to React Next Documentation Bangla
 ---
-
 
 ## <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">React-এ useEffect কেন এবং কখন ব্যবহার করব না?</h1>
 
-React-এর অন্যতম গুরুত্বপূর্ণ হুক হলো `useEffect`, যা সাধারণত কোডের সাইড এফেক্ট পরিচালনা করতে ব্যবহার করা হয়। তবে, এটি ভুলভাবে ব্যবহার করলে কোড অপ্রয়োজনীয়ভাবে জটিল হয়ে যায়, অ্যাপ্লিকেশন স্লো হয়ে পড়ে এবং অনেক সময় বাগ তৈরি হয়।  
+React-এর অন্যতম গুরুত্বপূর্ণ হুক হলো `useEffect`, যা সাধারণত কোডের সাইড এফেক্ট পরিচালনা করতে ব্যবহার করা হয়। তবে, এটি ভুলভাবে ব্যবহার করলে কোড অপ্রয়োজনীয়ভাবে জটিল হয়ে যায়, অ্যাপ্লিকেশন স্লো হয়ে পড়ে এবং অনেক সময় বাগ তৈরি হয়।
 
-এখানে React-এর একটি সহজ নিয়ম মনে রাখতে হবে: **React ডিক্লারেটিভ এবং প্রেডিক্টেবল পদ্ধতিতে কাজ করে। যদি কোনো কাজ React-এর এই স্বাভাবিক প্রক্রিয়ায় করা সম্ভব হয়, তবে সেখানে `useEffect` ব্যবহার করা উচিত নয়।**  
+এখানে React-এর একটি সহজ নিয়ম মনে রাখতে হবে: **React ডিক্লারেটিভ এবং প্রেডিক্টেবল পদ্ধতিতে কাজ করে। যদি কোনো কাজ React-এর এই স্বাভাবিক প্রক্রিয়ায় করা সম্ভব হয়, তবে সেখানে `useEffect` ব্যবহার করা উচিত নয়।**
 
 ---
 
-### **`useEffect` কেন ভুলভাবে ব্যবহার হয়?**  
+### **`useEffect` কেন ভুলভাবে ব্যবহার হয়?**
+
 অনেক সময় আমরা ভাবি, যখনই কোনো স্টেট বা প্রপ পরিবর্তিত হবে বা ডাটা ট্রান্সফর্ম করতে হবে, তখন `useEffect` দরকার। কিন্তু আসলে বেশিরভাগ ক্ষেত্রেই এটি প্রয়োজন হয় না।  
-আমরা এখন কয়েকটি উদাহরণের মাধ্যমে বিষয়গুলো আরও পরিষ্কার করব।  
+আমরা এখন কয়েকটি উদাহরণের মাধ্যমে বিষয়গুলো আরও পরিষ্কার করব।
 
 ---
 
-### **১. ডাটা ট্রান্সফর্ম করার জন্য ইফেক্ট ব্যবহার করা ভুল**  
+### **১. ডাটা ট্রান্সফর্ম করার জন্য ইফেক্ট ব্যবহার করা ভুল**
 
-#### যখন দরকার হয়:  
-ধরো, তুমি একটি ফর্ম বানাচ্ছ, যেখানে ইউজারের `firstName` এবং `lastName` ইনপুট নিয়ে তা থেকে `fullName` তৈরি করে UI-তে দেখাবে।  
+#### যখন দরকার হয়:
 
-#### ভুল পদ্ধতি:  
-অনেকে প্রথমে `fullName` নামে একটি আলাদা স্টেট তৈরি করে এবং ইফেক্ট দিয়ে `firstName` এবং `lastName` থেকে তা আপডেট করে:  
+ধরো, তুমি একটি ফর্ম বানাচ্ছ, যেখানে ইউজারের `firstName` এবং `lastName` ইনপুট নিয়ে তা থেকে `fullName` তৈরি করে UI-তে দেখাবে।
+
+#### ভুল পদ্ধতি:
+
+অনেকে প্রথমে `fullName` নামে একটি আলাদা স্টেট তৈরি করে এবং ইফেক্ট দিয়ে `firstName` এবং `lastName` থেকে তা আপডেট করে:
 
 ```jsx
 function Form() {
-    const [firstName, setFirstName] = useState("Taylor");
-    const [lastName, setLastName] = useState("Swift");
+  const [firstName, setFirstName] = useState("Taylor");
+  const [lastName, setLastName] = useState("Swift");
 
-    // ❌ অপ্রয়োজনীয় ইফেক্ট এবং স্টেট
-    const [fullName, setFullName] = useState("");
-    useEffect(() => {
-        setFullName(firstName + " " + lastName);
-    }, [firstName, lastName]);
+  // ❌ অপ্রয়োজনীয় ইফেক্ট এবং স্টেট
+  const [fullName, setFullName] = useState("");
+  useEffect(() => {
+    setFullName(firstName + " " + lastName);
+  }, [firstName, lastName]);
 }
 ```
 
-##### সমস্যাটা কোথায়?  
+##### সমস্যাটা কোথায়?
+
 ১. তুমি এখানে `fullName` এর জন্য অপ্রয়োজনীয় একটি স্টেট তৈরি করেছ।  
 ২. `useEffect` প্রতিবার `firstName` বা `lastName` পরিবর্তন হলে রান করবে, যা এক্সট্রা প্রসেসিং।  
-৩. কোড আরও জটিল হয়ে গেছে এবং ভবিষ্যতে মেইনটেন করা কঠিন হবে।  
+৩. কোড আরও জটিল হয়ে গেছে এবং ভবিষ্যতে মেইনটেন করা কঠিন হবে।
 
-#### সঠিক পদ্ধতি:  
-এই কাজটি ইফেক্ট ছাড়াই করা যায়, ডিরাইভড স্টেট ব্যবহার করে। শুধু রেন্ডারিংয়ের সময় `fullName` ক্যালকুলেট করলেই হয়ে যায়:  
+#### সঠিক পদ্ধতি:
+
+এই কাজটি ইফেক্ট ছাড়াই করা যায়, ডিরাইভড স্টেট ব্যবহার করে। শুধু রেন্ডারিংয়ের সময় `fullName` ক্যালকুলেট করলেই হয়ে যায়:
 
 ```jsx
 function Form() {
-    const [firstName, setFirstName] = useState("Taylor");
-    const [lastName, setLastName] = useState("Swift");
+  const [firstName, setFirstName] = useState("Taylor");
+  const [lastName, setLastName] = useState("Swift");
 
-    // ✅ ভালো: রেন্ডারিংয়ের সময়ই ক্যালকুলেট করা
-    const fullName = firstName + " " + lastName;
+  // ✅ ভালো: রেন্ডারিংয়ের সময়ই ক্যালকুলেট করা
+  const fullName = firstName + " " + lastName;
 
-    return (
-        <div>
-            <p>Full Name: {fullName}</p>
-        </div>
-    );
+  return (
+    <div>
+      <p>Full Name: {fullName}</p>
+    </div>
+  );
 }
 ```
 
-##### এই পদ্ধতির সুবিধা:  
-- কোনো অপ্রয়োজনীয় স্টেট নেই।  
-- কোনো ইফেক্ট দরকার হয়নি।  
-- কোড পরিষ্কার এবং সহজবোধ্য।  
+##### এই পদ্ধতির সুবিধা:
+
+- কোনো অপ্রয়োজনীয় স্টেট নেই।
+- কোনো ইফেক্ট দরকার হয়নি।
+- কোড পরিষ্কার এবং সহজবোধ্য।
 
 ---
 
-### **২. প্রপ চেঞ্জ হলে লোকাল স্টেট রিসেট করার জন্য ইফেক্ট দরকার নেই**  
+### **২. প্রপ চেঞ্জ হলে লোকাল স্টেট রিসেট করার জন্য ইফেক্ট দরকার নেই**
 
-#### যখন দরকার হয়:  
-ধরো, একটি ব্লগ পোস্ট কম্পোনেন্ট বানিয়েছ। এটি একটি প্রপ (postId) এর মাধ্যমে নির্ধারিত হয় এবং এর কিছু লোকাল স্টেট আছে (যেমন কমেন্ট)। এখন, যখন `postId` চেঞ্জ হবে, তখন তোমার কম্পোনেন্টের লোকাল স্টেটও রিসেট হওয়া দরকার।  
+#### যখন দরকার হয়:
 
-#### ভুল পদ্ধতি:  
-অনেকে এই কাজের জন্য `useEffect` ব্যবহার করে, যা কার্যকর হলেও অপ্রয়োজনীয় এবং স্লো হতে পারে।  
+ধরো, একটি ব্লগ পোস্ট কম্পোনেন্ট বানিয়েছ। এটি একটি প্রপ (postId) এর মাধ্যমে নির্ধারিত হয় এবং এর কিছু লোকাল স্টেট আছে (যেমন কমেন্ট)। এখন, যখন `postId` চেঞ্জ হবে, তখন তোমার কম্পোনেন্টের লোকাল স্টেটও রিসেট হওয়া দরকার।
+
+#### ভুল পদ্ধতি:
+
+অনেকে এই কাজের জন্য `useEffect` ব্যবহার করে, যা কার্যকর হলেও অপ্রয়োজনীয় এবং স্লো হতে পারে।
 
 ```jsx
 function Post({ postId }) {
-    const [comment, setComment] = useState("");
+  const [comment, setComment] = useState("");
 
-    // ❌ অপ্রয়োজনীয় ইফেক্ট
-    useEffect(() => {
-        setComment(""); // লোকাল স্টেট রিসেট করা
-    }, [postId]);
+  // ❌ অপ্রয়োজনীয় ইফেক্ট
+  useEffect(() => {
+    setComment(""); // লোকাল স্টেট রিসেট করা
+  }, [postId]);
 }
 ```
 
-##### সমস্যাটা কোথায়?  
-- `useEffect` প্রথমে পুরোনো ডাটা রেন্ডার করবে, তারপর স্টেট রিসেট করবে, ফলে স্ক্রিনে কিছুক্ষণের জন্য ভুল ডাটা দেখা যাবে।  
-- ইফেক্ট প্রতিবার রান করবে, যা পারফরম্যান্সে নেতিবাচক প্রভাব ফেলে।  
+##### সমস্যাটা কোথায়?
 
-#### সঠিক পদ্ধতি:  
-এই কাজটি খুব সহজে `key` প্রপ ব্যবহার করে করা যায়। React প্রতিবার নতুন `key` পেলে পুরো কম্পোনেন্ট রি-রেন্ডার করবে এবং লোকাল স্টেট রিসেট করবে:  
+- `useEffect` প্রথমে পুরোনো ডাটা রেন্ডার করবে, তারপর স্টেট রিসেট করবে, ফলে স্ক্রিনে কিছুক্ষণের জন্য ভুল ডাটা দেখা যাবে।
+- ইফেক্ট প্রতিবার রান করবে, যা পারফরম্যান্সে নেতিবাচক প্রভাব ফেলে।
+
+#### সঠিক পদ্ধতি:
+
+এই কাজটি খুব সহজে `key` প্রপ ব্যবহার করে করা যায়। React প্রতিবার নতুন `key` পেলে পুরো কম্পোনেন্ট রি-রেন্ডার করবে এবং লোকাল স্টেট রিসেট করবে:
 
 ```jsx
 function BlogPage({ postId }) {
-    return <Post key={postId} postId={postId} />;
+  return <Post key={postId} postId={postId} />;
 }
 
 function Post({ postId }) {
-    const [comment, setComment] = useState(""); // লোকাল স্টেট
+  const [comment, setComment] = useState(""); // লোকাল স্টেট
 
-    return (
-        <div>
-            <h1>Post {postId}</h1>
-            <textarea
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-            />
-        </div>
-    );
+  return (
+    <div>
+      <h1>Post {postId}</h1>
+      <textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+    </div>
+  );
 }
 ```
 
-##### এই পদ্ধতির সুবিধা:  
-- কম্পোনেন্ট স্বাভাবিকভাবে রিসেট হয়।  
-- কোনো ইফেক্ট প্রয়োজন হয়নি।  
-- স্ক্রিনে ভুল ডাটা ফ্ল্যাশ হওয়ার ঝুঁকি নেই।  
+##### এই পদ্ধতির সুবিধা:
+
+- কম্পোনেন্ট স্বাভাবিকভাবে রিসেট হয়।
+- কোনো ইফেক্ট প্রয়োজন হয়নি।
+- স্ক্রিনে ভুল ডাটা ফ্ল্যাশ হওয়ার ঝুঁকি নেই।
 
 ---
 
-### **৩. ইভেন্টের জন্য ইফেক্ট ব্যবহার করা ভুল**  
+### **৩. ইভেন্টের জন্য ইফেক্ট ব্যবহার করা ভুল**
 
-#### যখন দরকার হয়:  
-ধরো, একটি প্রোডাক্ট পেজে দুটি বাটন আছে:  
-- `Add to Cart` (শপিং কার্টে যোগ করে)।  
+#### যখন দরকার হয়:
+
+ধরো, একটি প্রোডাক্ট পেজে দুটি বাটন আছে:
+
+- `Add to Cart` (শপিং কার্টে যোগ করে)।
 - `Checkout` (কার্টে যোগ করে চেকআউট পেজে নিয়ে যায়)।  
-প্রতিবার কোনো বাটনে ক্লিক করলে একটি নোটিফিকেশন দেখাতে হবে।  
+  প্রতিবার কোনো বাটনে ক্লিক করলে একটি নোটিফিকেশন দেখাতে হবে।
 
-#### ভুল পদ্ধতি:  
-অনেকে ইফেক্টের মাধ্যমে ইভেন্ট লজিক শেয়ার করে এই কাজটি করে:  
+#### ভুল পদ্ধতি:
 
-```jsx
-function ProductPage({ product, addToCart }) {
-    useEffect(() => {
-        if (product.isInCart) {
-            showNotification(`Added ${product.name} to the cart!`);
-        }
-    }, [product]);
-
-    function handleAddToCart() {
-        addToCart(product);
-    }
-
-    function handleCheckout() {
-        addToCart(product);
-        navigateTo("/checkout");
-    }
-}
-```
-
-##### সমস্যাটা কোথায়?  
-- ইফেক্ট ইভেন্ট-স্পেসিফিক লজিকের জন্য নয়।  
-- এখানে ইফেক্ট অপ্রয়োজনীয় এবং অতিরিক্ত জটিলতা তৈরি করেছে।  
-
-#### সঠিক পদ্ধতি:  
-ইভেন্ট হ্যান্ডলারের মধ্যেই এই কাজটি সহজে করা যায়:  
+অনেকে ইফেক্টের মাধ্যমে ইভেন্ট লজিক শেয়ার করে এই কাজটি করে:
 
 ```jsx
 function ProductPage({ product, addToCart }) {
-    function handleAddToCart() {
-        addToCart(product);
-        showNotification(`Added ${product.name} to the cart!`);
+  useEffect(() => {
+    if (product.isInCart) {
+      showNotification(`Added ${product.name} to the cart!`);
     }
+  }, [product]);
 
-    function handleCheckout() {
-        addToCart(product);
-        showNotification(`Added ${product.name} to the cart!`);
-        navigateTo("/checkout");
-    }
+  function handleAddToCart() {
+    addToCart(product);
+  }
+
+  function handleCheckout() {
+    addToCart(product);
+    navigateTo("/checkout");
+  }
 }
 ```
 
-##### এই পদ্ধতির সুবিধা:  
-- ইভেন্ট হ্যান্ডলার পরিষ্কার এবং সরাসরি।  
-- ইফেক্ট ছাড়াই কাজ সম্পন্ন।  
+##### সমস্যাটা কোথায়?
+
+- ইফেক্ট ইভেন্ট-স্পেসিফিক লজিকের জন্য নয়।
+- এখানে ইফেক্ট অপ্রয়োজনীয় এবং অতিরিক্ত জটিলতা তৈরি করেছে।
+
+#### সঠিক পদ্ধতি:
+
+ইভেন্ট হ্যান্ডলারের মধ্যেই এই কাজটি সহজে করা যায়:
+
+```jsx
+function ProductPage({ product, addToCart }) {
+  function handleAddToCart() {
+    addToCart(product);
+    showNotification(`Added ${product.name} to the cart!`);
+  }
+
+  function handleCheckout() {
+    addToCart(product);
+    showNotification(`Added ${product.name} to the cart!`);
+    navigateTo("/checkout");
+  }
+}
+```
+
+##### এই পদ্ধতির সুবিধা:
+
+- ইভেন্ট হ্যান্ডলার পরিষ্কার এবং সরাসরি।
+- ইফেক্ট ছাড়াই কাজ সম্পন্ন।
 
 ---
 
-### **শেষ কথা**  
-React-এ `useEffect` হলো এমন কাজের জন্য, যা React-এর স্বাভাবিক ডিক্লারেটিভ পদ্ধতিতে করা সম্ভব নয়। অপ্রয়োজনীয় ইফেক্ট ব্যবহার করলে কোড জটিল, ধীরগতিসম্পন্ন এবং বাগপ্রবণ হয়ে যায়।  
+### **শেষ কথা**
 
-তুমি যখন কোড লিখবে, সবসময় নিজেকে প্রশ্ন করো:  
-- **এই কাজটা কি রেন্ডারিংয়ের সময় ক্যালকুলেট করা সম্ভব?**  
-- **ইভেন্ট হ্যান্ডলার দিয়ে কাজটা করা যায় কি?**  
-- **`key` প্রপ দিয়ে লোকাল স্টেট রিসেট করা সম্ভব কি?**  
+React-এ `useEffect` হলো এমন কাজের জন্য, যা React-এর স্বাভাবিক ডিক্লারেটিভ পদ্ধতিতে করা সম্ভব নয়। অপ্রয়োজনীয় ইফেক্ট ব্যবহার করলে কোড জটিল, ধীরগতিসম্পন্ন এবং বাগপ্রবণ হয়ে যায়।
 
-যদি উত্তর "হ্যাঁ" হয়, তাহলে `useEffect` বাদ দাও।  
+তুমি যখন কোড লিখবে, সবসময় নিজেকে প্রশ্ন করো:
 
--------
+- **এই কাজটা কি রেন্ডারিংয়ের সময় ক্যালকুলেট করা সম্ভব?**
+- **ইভেন্ট হ্যান্ডলার দিয়ে কাজটা করা যায় কি?**
+- **`key` প্রপ দিয়ে লোকাল স্টেট রিসেট করা সম্ভব কি?**
+
+যদি উত্তর "হ্যাঁ" হয়, তাহলে `useEffect` বাদ দাও।
+
+---
+
 ঠিক আছে! আমি তোমার বলার মতো করে সুন্দরভাবে এবং সহজ ভাষায় এটার ব্যাখ্যা করে দিচ্ছি, যেন তোমার ছোট ভাই খুব সহজে বুঝতে পারে।
 
 ---
@@ -201,26 +217,27 @@ React-এ `useEffect` হলো এমন কাজের জন্য, যা R
 এটা সমাধান করতে আমরা কী করতে পারি?
 
 ### সমাধান:
+
 আমরা ইভেন্ট স্পেসিফিক লজিকটাকে ইভেন্ট হ্যান্ডলারে রাখব, যেন শুধুমাত্র যখন ইউজার `Buy Product` বা `Checkout` বাটন টিপবে, তখনই নোটিফিকেশন দেখাবে।
 
 ```jsx
 function ProductPage({ product, addToCart }) {
-    // ✅ ভালো: ইভেন্ট হ্যান্ডলারে লজিকটি রাখলে কেবলমাত্র নির্দিষ্ট ইভেন্টেই কাজ হবে
+  // ✅ ভালো: ইভেন্ট হ্যান্ডলারে লজিকটি রাখলে কেবলমাত্র নির্দিষ্ট ইভেন্টেই কাজ হবে
 
-    function buyProduct() {
-        addToCart(product);
-        `Added ${product.name} to the shopping cart!`;
-    }
+  function buyProduct() {
+    addToCart(product);
+    `Added ${product.name} to the shopping cart!`;
+  }
 
-    function handleBuyClick() {
-        buyProduct();
-    }
+  function handleBuyClick() {
+    buyProduct();
+  }
 
-    function handleCheckoutClick() {
-        buyProduct();
-        navigateTo("/checkout");
-    }
-    // ...
+  function handleCheckoutClick() {
+    buyProduct();
+    navigateTo("/checkout");
+  }
+  // ...
 }
 ```
 
@@ -242,20 +259,20 @@ function ProductPage({ product, addToCart }) {
 
 ```jsx
 function Form() {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
-    // ✅ ভালো: ফর্ম ভিজিট করার সময় পোস্ট রিকুয়েস্ট অটোমেটিক্যালি পাঠানো হবে
-    useEffect(() => {
-        post("/analytics/event", { eventName: "visit_form" });
-    }, []);
+  // ✅ ভালো: ফর্ম ভিজিট করার সময় পোস্ট রিকুয়েস্ট অটোমেটিক্যালি পাঠানো হবে
+  useEffect(() => {
+    post("/analytics/event", { eventName: "visit_form" });
+  }, []);
 
-    // ✅ ভালো: ইউজার সাবমিট করার পর পোস্ট রিকুয়েস্ট পাঠানো হবে
-    function handleSubmit(e) {
-        e.preventDefault();
-        post("api/register", { firstName, lastName });
-    }
-    // ...
+  // ✅ ভালো: ইউজার সাবমিট করার পর পোস্ট রিকুয়েস্ট পাঠানো হবে
+  function handleSubmit(e) {
+    e.preventDefault();
+    post("api/register", { firstName, lastName });
+  }
+  // ...
 }
 ```
 
@@ -271,15 +288,15 @@ function Form() {
 let didInit = false;
 
 function App() {
-    useEffect(() => {
-        if (!didInit) {
-            didInit = true;
-            // ✅ একবারই রান হবে
-            loadDataFromLocalStorage();
-            checkAuthToken();
-        }
-    }, []);
-    // ...
+  useEffect(() => {
+    if (!didInit) {
+      didInit = true;
+      // ✅ একবারই রান হবে
+      loadDataFromLocalStorage();
+      checkAuthToken();
+    }
+  }, []);
+  // ...
 }
 ```
 
@@ -289,13 +306,13 @@ function App() {
 
 ```jsx
 if (typeof window !== "undefined") {
-    // ✅ শুধু একবার রান হবে
-    checkAuthToken();
-    loadDataFromLocalStorage();
+  // ✅ শুধু একবার রান হবে
+  checkAuthToken();
+  loadDataFromLocalStorage();
 }
 
 function App() {
-    // ...
+  // ...
 }
 ```
 
@@ -311,27 +328,27 @@ function App() {
 
 ```jsx
 function Toggle({ onChange }) {
-    const [isOn, setIsOn] = useState(false);
+  const [isOn, setIsOn] = useState(false);
 
-    function updateToggle(nextIsOn) {
-        // ✅ ভালো: সমস্ত আপডেট ইভেন্টের মধ্যেই হবে
-        setIsOn(nextIsOn);
-        onChange(nextIsOn);
+  function updateToggle(nextIsOn) {
+    // ✅ ভালো: সমস্ত আপডেট ইভেন্টের মধ্যেই হবে
+    setIsOn(nextIsOn);
+    onChange(nextIsOn);
+  }
+
+  function handleClick() {
+    updateToggle(!isOn);
+  }
+
+  function handleDragEnd(e) {
+    if (isCloserToRightEdge(e)) {
+      updateToggle(true);
+    } else {
+      updateToggle(false);
     }
+  }
 
-    function handleClick() {
-        updateToggle(!isOn);
-    }
-
-    function handleDragEnd(e) {
-        if (isCloserToRightEdge(e)) {
-            updateToggle(true);
-        } else {
-            updateToggle(false);
-        }
-    }
-
-    // ...
+  // ...
 }
 ```
 
@@ -345,14 +362,14 @@ function Toggle({ onChange }) {
 
 ```jsx
 function Parent() {
-    const data = useSomeAPI();
-    // ...
-    // ✅ ভালো: প্যারেন্ট থেকে চাইল্ডে ডাটা পাঠানো
-    return <Child data={data} />;
+  const data = useSomeAPI();
+  // ...
+  // ✅ ভালো: প্যারেন্ট থেকে চাইল্ডে ডাটা পাঠানো
+  return <Child data={data} />;
 }
 
 function Child({ data }) {
-    // ...
+  // ...
 }
 ```
 

@@ -1,6 +1,6 @@
 ---
 title: 3.7 State Reducer
-description: Welcome to React Next Documantation Bangla
+description: Welcome to React Next Documentation Bangla
 ---
 
 import { Step, Steps } from "fumadocs-ui/components/steps";
@@ -103,7 +103,7 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
             }
         };
 
-```
+````
       </Tab>
     </Tabs>
 
@@ -132,57 +132,58 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
             );
         }
 
-```
+````
+
       </Tab>
     <Tab value="App.jsx">
+
 ```jsx
+import React, { useReducer } from "react";
+import Counter from "./Counter";
+import counterReducer from "./CounterReducer.js";
+import CounterContext from "./CounterContext.js";
 
-        import React, { useReducer } from 'react';
-        import Counter from "./Counter";
-        import counterReducer from "./CounterReducer.js";
-        import CounterContext from "./CounterContext.js";
+const App = () => {
+  const initialState = 0;
+  const [count, dispatch] = useReducer(counterReducer, initialState);
+  return (
+    <div>
+      <CounterContext.Provider value={{ count, dispatch }}>
+        <Counter />
+      </CounterContext.Provider>
+    </div>
+  );
+};
 
-        const App = () => {
-            const initialState = 0;
-            const [count, dispatch] = useReducer(counterReducer, initialState);
-            return (
-                <div>
-                    <CounterContext.Provider value={{ count, dispatch }}>
-                        <Counter />
-                    </CounterContext.Provider>
-                </div>
-            );
-        }
-
-        export default App;
-
+export default App;
 ```
+
       </Tab>
 
        <Tab value="CounterContext.js">
+
 ```jsx
-
-        import { createContext } from "react";
-        const CounterContext = createContext(0);
-        export default CounterContext;
-
+import { createContext } from "react";
+const CounterContext = createContext(0);
+export default CounterContext;
 ```
+
       </Tab>
       <Tab value="counterReducer.js">
+
 ```jsx
-
-        export const counterReducer = (state, action) => {
-            switch (action.type) {
-                case "INCREMENT":
-                    return state + 1;
-                case "DECREMENT":
-                    return state - 1;
-                default:
-                    return state;
-            }
-        };
-
+export const counterReducer = (state, action) => {
+  switch (action.type) {
+    case "INCREMENT":
+      return state + 1;
+    case "DECREMENT":
+      return state - 1;
+    default:
+      return state;
+  }
+};
 ```
+
       </Tab>
     </Tabs>
 
@@ -215,7 +216,7 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
     export default App;
 
-```
+````
     </Tab>
 
    <Tab value="CounterProvider.js">
@@ -239,7 +240,8 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
       export default CounterProvider;
 
-```
+````
+
     </Tab>
 
 <Tab value="counterReducer.js">
@@ -256,7 +258,7 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
           }
       };
 
-```
+````
     </Tab>
 
  <Tab value="Counter.jsx">
@@ -276,7 +278,7 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
           );
       }
 
-```
+````
 
     </Tab>
 
@@ -344,7 +346,7 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
           }
       };
 
-```
+````
     </Tab>
 
 <Tab value="Counter.jsx">
@@ -364,7 +366,8 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
           );
       }
 
-```
+````
+
     </Tab>
 
 <Tab value="useCounter.js">
@@ -383,7 +386,7 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
       export default useCounter;
 
-```
+````
     </Tab>
 
 </Tabs>
@@ -409,7 +412,10 @@ const SomeComponent = () => {
 };
 
 export default SomeComponent;
-```
+````
 
 এখন, `Counter` কম্পোনেন্টের পরিবর্তে, আমরা `useCounter` হুক ব্যবহার করতে পারি, যা আমাদের কোড আরও পরিষ্কার এবং কার্যকর করবে।
-````
+
+```
+
+```
