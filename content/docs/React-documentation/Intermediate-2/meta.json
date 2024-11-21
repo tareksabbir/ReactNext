@@ -15,7 +15,9 @@
     "4.12-separating-Events-from-Effects",
     "4.13-removing-Effect-Dependencies",
     "4.14-reusing-Logic-with-Custom-Hook",
-    "4.15-performance-Optimization"
+    "4.15-performance-Optimization",
+    "4.16-react-useCallback",
+    "4.17-react-useMemo"
 
   ]
 }
