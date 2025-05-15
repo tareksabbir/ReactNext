@@ -152,7 +152,7 @@ All constructive contributions are welcome!
 ## Full Detail Documentation
 
 - if you wanted to see full detail documentation click here
-- [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tareksabbir/ReactNext)
+- <a classname="mt-2" href="https://deepwiki.com/tareksabbir/ReactNext"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 
 ---
 
