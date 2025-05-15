@@ -1,7 +1,5 @@
 # ReactNext
 
-![ReactNext Logo](./public/reactnext-logo.svg)
-
 > **Bangla-first React & Next.js Documentation**
 
 ReactNext is an open‑source documentation project that removes the language barrier for Bangla‑speaking developers who want to master **React** and **Next.js**. Written entirely in Bangla (with essential English terminology preserved), ReactNext delivers clear explanations, real‑world code, and interactive learning aids—all packaged in a familiar, MDX‑powered Next.js site.
