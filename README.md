@@ -151,6 +151,11 @@ All constructive contributions are welcome!
 
 ---
 
+## Full Detail Documentation 
+
+* if you wanted to see full detail documentation click here [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tareksabbir/ReactNext)
+---
+
 ## Roadmap
 
 * [x] JavaScript Fundamentals
@@ -184,6 +189,8 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 * The **React** team for the best UI library.
 * The **Next.js** team for an outstanding framework.
 * **Fumadocs** for the slick documentation tooling.
+* LWS (learn with shumit)
+* Dev Ripon
 * Every **contributor** who pushes the project forward.
 
 > “Happy coding 🚀”
