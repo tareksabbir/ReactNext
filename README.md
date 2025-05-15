@@ -76,10 +76,10 @@ content/
 
 ## Key Features
 
-* **Bangla‑First Approach** – Native language explanations without sacrificing technical precision.
-* **Interactive Learning** – Fumadocs UI components (Steps, Tabs) guide learners through step‑by‑step builds.
-* **Visual Aids** – Diagrams & flowcharts illuminate abstract ideas.
-* **Gradient Headings** – Readability meets aesthetics.
+- **Bangla‑First Approach** – Native language explanations without sacrificing technical precision.
+- **Interactive Learning** – Fumadocs UI components (Steps, Tabs) guide learners through step‑by‑step builds.
+- **Visual Aids** – Diagrams & flowcharts illuminate abstract ideas.
+- **Gradient Headings** – Readability meets aesthetics.
 
 ```jsx
 <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 inline-block text-transparent bg-clip-text text-3xl pt-2">
@@ -125,8 +125,8 @@ http://localhost:3000
 
 ## Prerequisites
 
-* **Git / GitHub** – Basic version‑control workflow.
-* **JavaScript ES6+** – React is JavaScript at its core.
+- **Git / GitHub** – Basic version‑control workflow.
+- **JavaScript ES6+** – React is JavaScript at its core.
 
 ---
 
@@ -149,20 +149,22 @@ All constructive contributions are welcome!
 
 ---
 
-## Full Detail Documentation 
+## Full Detail Documentation
 
-* if you wanted to see full detail documentation click here [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tareksabbir/ReactNext)
+- if you wanted to see full detail documentation click here
+- [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/tareksabbir/ReactNext)
+
 ---
 
 ## Roadmap
 
-* [x] JavaScript Fundamentals
-* [x] React Core Concepts
-* [ ] Advanced State Management (Redux, Zustand, Jotai)
-* [ ] Styling Solutions (Tailwind, CSS Modules, Styled Components)
-* [ ] React Ecosystem (Routing, API requests, authentication)
-* [ ] React Frameworks (Vite, Remix)
-* [ ] Beyond React (Team collaboration, career development)
+- [x] JavaScript Fundamentals
+- [x] React Core Concepts
+- [ ] Advanced State Management (Redux, Zustand, Jotai)
+- [ ] Styling Solutions (Tailwind, CSS Modules, Styled Components)
+- [ ] React Ecosystem (Routing, API requests, authentication)
+- [ ] React Frameworks (Vite, Remix)
+- [ ] Beyond React (Team collaboration, career development)
 
 ---
 
@@ -184,11 +186,11 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 ## Acknowledgements
 
-* The **React** team for the best UI library.
-* The **Next.js** team for an outstanding framework.
-* **Fumadocs** for the slick documentation tooling.
-* LWS (learn with shumit)
-* Dev Ripon
-* Every **contributor** who pushes the project forward.
+- The **React** team for the best UI library.
+- The **Next.js** team for an outstanding framework.
+- **Fumadocs** for the slick documentation tooling.
+- LWS (learn with shumit)
+- Dev Ripon
+- Every **contributor** who pushes the project forward.
 
 > “Happy coding 🚀”
